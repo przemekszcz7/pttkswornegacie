@@ -41,7 +41,7 @@ export default function Header() {
           <img
             src="https://i.ibb.co/TxnBQf0H/613302369-122168003180823864-3793124179119175346-n.jpg"
             alt="PTTK Swornegacie Logo"
-            className="w-12 h-12 md:w-14 h-14 rounded-full border-2 border-tawerna-gold object-cover shadow-md transition-transform duration-300 group-hover:scale-105"
+            className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-tawerna-gold object-cover shadow-md transition-transform duration-300 group-hover:scale-105"
             referrerPolicy="no-referrer"
           />
           <div className="flex flex-col">

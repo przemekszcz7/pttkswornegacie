@@ -4,30 +4,17 @@ import { X, ChevronLeft, ChevronRight, Maximize2, Layers } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Gallery() {
-  const [filter, setFilter] = useState<'all' | 'rooms' | 'tavern' | 'nature' | 'activities'>('all');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  const categories = [
-    { value: 'all', label: 'Wszystkie zdjęcia' },
-    { value: 'rooms', label: 'Domki i Camping' },
-    { value: 'tavern', label: 'Tawerna i Taras' },
-    { value: 'activities', label: 'Spływy i Aktywności' },
-    { value: 'nature', label: 'Przyroda wokół nas' },
-  ];
-
-  const filteredItems = filter === 'all' 
-    ? GALLERY_ITEMS 
-    : GALLERY_ITEMS.filter(item => item.category === filter);
 
   const handlePrev = () => {
     if (lightboxIndex === null) return;
-    const prevIndex = lightboxIndex === 0 ? filteredItems.length - 1 : lightboxIndex - 1;
+    const prevIndex = lightboxIndex === 0 ? GALLERY_ITEMS.length - 1 : lightboxIndex - 1;
     setLightboxIndex(prevIndex);
   };
 
   const handleNext = () => {
     if (lightboxIndex === null) return;
-    const nextIndex = lightboxIndex === filteredItems.length - 1 ? 0 : lightboxIndex + 1;
+    const nextIndex = lightboxIndex === GALLERY_ITEMS.length - 1 ? 0 : lightboxIndex + 1;
     setLightboxIndex(nextIndex);
   };
 
@@ -54,34 +41,13 @@ export default function Gallery() {
           </p>
         </div>
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10 pb-2 border-b border-tawerna-gold/10">
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => {
-                setFilter(cat.value as any);
-                setLightboxIndex(null);
-              }}
-              className={`px-4 py-2 font-sans font-semibold text-xs md:text-sm tracking-wide transition-all rounded-md cursor-pointer ${
-                filter === cat.value
-                  ? 'bg-tawerna-gold text-tawerna-dark font-bold shadow-md'
-                  : 'text-tawerna-sand hover:text-tawerna-gold hover:bg-tawerna-wood/50'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
         {/* Image Grid */}
         <motion.div 
           layout
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filteredItems.map((item, index) => {
-              // find the actual global index in filteredItems
+            {GALLERY_ITEMS.map((item, index) => {
               return (
                 <motion.div
                   key={item.id}
@@ -102,23 +68,10 @@ export default function Gallery() {
                     loading="lazy"
                   />
 
-                  {/* Wood overlay gradient for text visibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-tawerna-dark via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-
-                  {/* Interactive icon & content overlay */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <span className="text-[10px] font-display font-medium text-tawerna-gold tracking-widest uppercase">
-                          {categories.find(c => c.value === item.category)?.label}
-                        </span>
-                        <h3 className="font-serif text-sm font-bold text-tawerna-cream tracking-wide group-hover:text-tawerna-gold transition">
-                          {item.title}
-                        </h3>
-                      </div>
-                      <div className="p-1.5 rounded-full bg-tawerna-dark/80 border border-tawerna-gold/30 text-tawerna-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <Maximize2 className="w-3.5 h-3.5" />
-                      </div>
+                  {/* Wood overlay gradient and zoom icon on hover */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <div className="p-2.5 rounded-full bg-tawerna-dark/90 border border-tawerna-gold/40 text-tawerna-gold transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                      <Maximize2 className="w-5 h-5" />
                     </div>
                   </div>
                 </motion.div>
@@ -128,9 +81,9 @@ export default function Gallery() {
         </motion.div>
 
         {/* No images fallback */}
-        {filteredItems.length === 0 && (
+         {GALLERY_ITEMS.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-tawerna-sand font-serif">Brak zdjęć w wybranej kategorii.</p>
+            <p className="text-tawerna-sand font-serif">Brak zdjęć w galerii.</p>
           </div>
         )}
       </div>
@@ -147,7 +100,7 @@ export default function Gallery() {
             {/* Header controls */}
             <div className="flex justify-between items-center w-full max-w-7xl mx-auto text-tawerna-cream z-10">
               <span className="font-mono text-xs text-tawerna-sand">
-                {lightboxIndex + 1} / {filteredItems.length} — {categories.find(c => c.value === filteredItems[lightboxIndex].category)?.label}
+                {lightboxIndex + 1} / {GALLERY_ITEMS.length}
               </span>
               <button
                 onClick={() => setLightboxIndex(null)}
@@ -170,8 +123,8 @@ export default function Gallery() {
               {/* Central high resolution display */}
               <div className="w-full h-[65vh] flex items-center justify-center pointer-events-none p-2">
                 <img
-                  src={filteredItems[lightboxIndex].url}
-                  alt={filteredItems[lightboxIndex].title}
+                  src={GALLERY_ITEMS[lightboxIndex].url}
+                  alt={GALLERY_ITEMS[lightboxIndex].title}
                   className="max-w-full max-h-full rounded-md shadow-2xl border-4 border-tawerna-wood object-contain"
                   referrerPolicy="no-referrer"
                 />
@@ -186,15 +139,7 @@ export default function Gallery() {
               </button>
             </div>
 
-            {/* Bottom descriptions */}
-            <div className="w-full max-w-3xl mx-auto text-center pb-4 z-10">
-              <h4 className="font-display text-lg md:text-2xl font-bold text-tawerna-gold glow-gold mb-1">
-                {filteredItems[lightboxIndex].title}
-              </h4>
-              <p className="font-serif text-sm md:text-base text-tawerna-sand italic">
-                {filteredItems[lightboxIndex].description}
-              </p>
-            </div>
+            {/* No text footer */}
           </motion.div>
         )}
       </AnimatePresence>

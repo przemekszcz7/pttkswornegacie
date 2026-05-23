@@ -194,20 +194,6 @@ export default function App() {
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
                   referrerPolicy="no-referrer"
                 />
-                
-                {/* Visual Glassmorphic Info Badge over the Photo */}
-                <div className="absolute inset-x-4 bottom-4 bg-tawerna-dark/85 border border-tawerna-gold/25 backdrop-blur-md p-4 rounded-lg flex gap-3 text-left">
-                  <img
-                    src="https://i.ibb.co/TxnBQf0H/613302369-122168003180823864-3793124179119175346-n.jpg"
-                    alt="Logo PTTK"
-                    className="w-10 h-10 rounded-full border border-tawerna-gold object-cover flex-shrink-0"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div>
-                    <p className="text-xs font-bold text-tawerna-gold">TRADYCJA PTTK</p>
-                    <p className="text-[11px] text-tawerna-cream font-serif italic">Swornegacie, rzeka Zbrzyca</p>
-                  </div>
-                </div>
               </div>
             </div>
 

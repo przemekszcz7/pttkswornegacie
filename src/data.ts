@@ -70,6 +70,20 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: 'Zachód słońca nad Zbrzycą',
     category: 'nature',
     description: 'Spektakularne barwy zachodzącego słońca widoczne z tarasów naszych domków.'
+  },
+  {
+    id: 'gal-11',
+    url: 'https://i.ibb.co/sv0jxCHJ/540740342-122144381030823864-7901955189446449078-n.jpg',
+    title: 'Przystań kajakowa pod nowym szyldem',
+    category: 'activities',
+    description: ''
+  },
+  {
+    id: 'gal-12',
+    url: 'https://i.ibb.co/C3ytTF3g/540741989-122144380484823864-7876530487274947402-n.jpg',
+    title: 'Sielankowy widok na jezioro i naszą przystań',
+    category: 'nature',
+    description: ''
   }
 ];
 
