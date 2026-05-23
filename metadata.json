@@ -1,0 +1,6 @@
+{
+  "name": "Stanica i Tawerna PTTK Swornegacie",
+  "description": "Profesjonalna, klimatyczna strona internetowa dla Stanicy Wodnej i Tawerny PTTK Swornegacie pod nowym zarządem.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
