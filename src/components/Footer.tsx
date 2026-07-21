@@ -23,7 +23,7 @@ export default function Footer() {
               <p className="font-serif font-bold text-xs text-tawerna-cream">i Tawerna PTTK Swornegacie</p>
             </div>
           </div>
-          <p className="text-xs font-serif italic text-justify leading-relaxed text-tawerna-sand">
+          <p className="text-xs font-serif italic text-left leading-relaxed text-tawerna-cream">
             Stanica Wodna PTTK pod nowym zarządem od 4 kwietnia 2025 roku. Oferujemy noclegi w odnowionych domkach letniskowych z aneksami kuchennymi i prywatnymi łazienkami. Do dyspozycji gości przygotowaliśmy trawiaste pole namiotowe, prywatne pomosty, spływy kajakowe oraz przytulną tawernę z wyśmienitym jedzeniem.
           </p>
         </div>

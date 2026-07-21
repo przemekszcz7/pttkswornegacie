@@ -51,7 +51,7 @@ export default function App() {
             <h1 className="font-display font-black text-4xl sm:text-6xl md:text-8xl leading-tight tracking-tight text-white glow-gold uppercase">
               Stanica Wodna <span className="text-tawerna-gold block font-serif lowercase italic font-normal text-3xl sm:text-5xl md:text-6xl tracking-normal mt-2 text-balance">i Tawerna Swornegacie</span>
             </h1>
-            <p className="max-w-2xl text-tawerna-sand text-lg md:text-xl mt-6 font-serif italic text-balance">
+            <p className="max-w-2xl text-[#fdfcf9] text-lg md:text-xl mt-6 font-serif italic text-balance">
               Tradycyjny kaszubski urok, komfortowe drewniane domki i smaczna domowa kuchnia nad samą rzeką Zbrzyca.
             </p>
           </motion.div>
@@ -110,11 +110,11 @@ export default function App() {
                 <span className="text-tawerna-gold font-serif italic text-3xl md:text-4xl font-normal">Serca Borów Tucholskich</span>
               </h2>
 
-              <p className="font-serif italic text-tawerna-sand text-lg md:text-xl border-l-4 border-tawerna-gold pl-4 leading-relaxed bg-tawerna-wood/15 py-3 pr-2 rounded-r-lg">
+              <p className="font-serif italic text-white font-medium text-lg md:text-xl border-l-4 border-tawerna-gold pl-4 leading-relaxed bg-tawerna-wood/30 py-4 pr-3 rounded-r-lg">
                 „Stanica Wodna PTTK w Swornegaciach od 4 kwietnia 2025 roku zyskała nowy oddech pod świeżym i pełnym pasji zarządem. Naszym celem jest połączenie kaszubskiego dziedzictwa z maksymalnym komfortem naszych Gości.”
               </p>
 
-              <p className="text-base md:text-lg leading-relaxed text-tawerna-sand/90 text-justify">
+              <p className="text-base md:text-lg leading-relaxed text-tawerna-cream text-left">
                 Położona przy samej malowniczej rzece <strong>Zbrzyca</strong>, u ujścia do Jeziora Witoczno, nasza stanica to wymarzone miejsce dla pasjonatów leśnej ciszy, wycieczek rowerowych, wędkarstwa i spływów kajakowych. Przygotowaliśmy dla Państwa w pełni zmodernizowane, pachnące świeżym lasem, drewniane domki, odnowione zaplecze sanitarne pola namiotowego oraz klimatyczną tawernę biesiadną tętniącą staropolskimi i kaszubskimi smakami.
               </p>
 
@@ -123,7 +123,7 @@ export default function App() {
                   <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-serif font-bold text-base text-tawerna-cream">Przytulne domki</h4>
-                    <p className="text-sm text-tawerna-sand">Prywatna łazienka z ciepłą wodą, aneks kuchenny, taras i grill.</p>
+                    <p className="text-sm text-tawerna-cream/90">Prywatna łazienka z ciepłą wodą, aneks kuchenny, taras i grill.</p>
                   </div>
                 </div>
 
@@ -131,7 +131,7 @@ export default function App() {
                   <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-serif font-bold text-base text-tawerna-cream">Tawerna z klimatem</h4>
-                    <p className="text-sm text-tawerna-sand">Pyszne domowe jedzenie, świeża smażona ryba i chłodne napoje.</p>
+                    <p className="text-sm text-tawerna-cream/90">Pyszne domowe jedzenie, świeża smażona ryba i chłodne napoje.</p>
                   </div>
                 </div>
 
@@ -139,7 +139,7 @@ export default function App() {
                   <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-serif font-bold text-base text-tawerna-cream">Raj dla aktywnych</h4>
-                    <p className="text-sm text-tawerna-sand">Wypożyczalnia kajaków na miejscu, rzeka Zbrzyca, pomosty i ogniska.</p>
+                    <p className="text-sm text-tawerna-cream/90">Wypożyczalnia kajaków na miejscu, rzeka Zbrzyca, pomosty i ogniska.</p>
                   </div>
                 </div>
 
@@ -147,7 +147,7 @@ export default function App() {
                   <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-serif font-bold text-base text-tawerna-cream">Cisza i spokój</h4>
-                    <p className="text-sm text-tawerna-sand">Piękny las sosnowy, śpiew ptaków i bezpośredni kontakt z naturą.</p>
+                    <p className="text-sm text-tawerna-cream/90">Piękny las sosnowy, śpiew ptaków i bezpośredni kontakt z naturą.</p>
                   </div>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function App() {
             <h2 className="font-display font-black text-4xl md:text-5xl text-tawerna-cream tracking-tight mb-4 text-balance">
               Wybierz Domek i Zarezerwuj
             </h2>
-            <p className="max-w-2xl mx-auto text-tawerna-sand text-lg md:text-xl font-serif italic text-balance">
+            <p className="max-w-2xl mx-auto text-tawerna-cream text-lg md:text-xl font-serif italic text-balance">
               Przygotowaliśmy trzy komfortowe, pachnące drewnem domki letniskowe. Wybierz termin na kalendarzyku obok domku i wyślij zgłoszenie – to banalnie proste!
             </p>
           </div>
@@ -226,19 +226,19 @@ export default function App() {
                     Klimatyczna, drewniana przystań idealna dla par
                   </p>
                   
-                  <div className="bg-tawerna-dark/50 p-4 rounded-xl border border-tawerna-gold/15 mb-4">
-                    <span className="block text-[10px] font-mono text-tawerna-sand uppercase tracking-wider">CENA PROSTOWA:</span>
-                    <span className="font-sans font-black text-tawerna-gold text-2xl">180 zł</span> <span className="text-sm text-tawerna-sand font-serif italic">/ doba</span>
+                  <div className="bg-tawerna-dark/60 p-4 rounded-xl border border-tawerna-gold/25 mb-4">
+                    <span className="block text-[10px] font-mono text-tawerna-gold uppercase tracking-wider font-bold">CENA PROSTOWA:</span>
+                    <span className="font-sans font-black text-white text-2xl">180 zł</span> <span className="text-sm text-tawerna-cream font-serif italic">/ doba</span>
                   </div>
 
-                  <p className="text-sm md:text-base text-tawerna-sand leading-relaxed mb-6">
+                  <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-6">
                     Przytulne wnętrze pachnące sosnowym lasem. Domek wyposażony jest w prywatną łazienkę z ciepłą wodą, w pełni sprawny aneks kuchenny z lodówką i płytą grzewczą, wygodne łoże małżeńskie oraz zadaszony taras z meblami ogrodowymi i prywatnym grillem.
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-2 bg-tawerna-dark/30 p-4 rounded-xl border border-tawerna-gold/10">
+                <div className="flex flex-col gap-2 bg-tawerna-dark/45 p-4 rounded-xl border border-tawerna-gold/20">
                   <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">ATUTY DOMKU:</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs text-tawerna-sand">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-sm text-tawerna-cream">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       <span>Łoże małżeńskie</span>
@@ -296,19 +296,19 @@ export default function App() {
                     Komfortowy wypoczynek dla małej rodziny lub przyjaciół
                   </p>
                   
-                  <div className="bg-tawerna-dark/50 p-4 rounded-xl border border-tawerna-gold/15 mb-4">
-                    <span className="block text-[10px] font-mono text-tawerna-sand uppercase tracking-wider">CENA PROSTOWA:</span>
-                    <span className="font-sans font-black text-tawerna-gold text-2xl">220 zł</span> <span className="text-sm text-tawerna-sand font-serif italic">/ doba</span>
+                  <div className="bg-tawerna-dark/60 p-4 rounded-xl border border-tawerna-gold/25 mb-4">
+                    <span className="block text-[10px] font-mono text-tawerna-gold uppercase tracking-wider font-bold">CENA PROSTOWA:</span>
+                    <span className="font-sans font-black text-white text-2xl">220 zł</span> <span className="text-sm text-tawerna-cream font-serif italic">/ doba</span>
                   </div>
 
-                  <p className="text-sm md:text-base text-tawerna-sand leading-relaxed mb-6">
+                  <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-6">
                     Szeroki, rodzinny domek letniskowy z pełnym węzłem sanitarnym (ciepła woda, prysznic, WC) oraz w pełni zaopatrzoną kuchnią. W środku znajduje się jedno łóżko małżeńskie (dwuosobowe) oraz jedno łóżko pojedyncze. Przy wejściu duży zadaszony taras i meble wypoczynkowe.
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-2 bg-tawerna-dark/30 p-4 rounded-xl border border-tawerna-gold/10">
+                <div className="flex flex-col gap-2 bg-tawerna-dark/45 p-4 rounded-xl border border-tawerna-gold/20">
                   <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">ATUTY DOMKU:</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs text-tawerna-sand">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-sm text-tawerna-cream">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       <span>Łóżko 2-os. + łóżko 1-os.</span>
@@ -366,19 +366,19 @@ export default function App() {
                     Wyjątkowe położenie tuż nad brzegiem rzeki Zbrzycy
                   </p>
                   
-                  <div className="bg-tawerna-dark/50 p-4 rounded-xl border border-tawerna-gold/15 mb-4">
-                    <span className="block text-[10px] font-mono text-tawerna-sand uppercase tracking-wider">CENA PROSTOWA:</span>
-                    <span className="font-sans font-black text-tawerna-gold text-2xl">240 zł</span> <span className="text-sm text-tawerna-sand font-serif italic">/ doba</span>
+                  <div className="bg-tawerna-dark/60 p-4 rounded-xl border border-tawerna-gold/25 mb-4">
+                    <span className="block text-[10px] font-mono text-tawerna-gold uppercase tracking-wider font-bold">CENA PROSTOWA:</span>
+                    <span className="font-sans font-black text-white text-2xl">240 zł</span> <span className="text-sm text-tawerna-cream font-serif italic">/ doba</span>
                   </div>
 
-                  <p className="text-sm md:text-base text-tawerna-sand leading-relaxed mb-6">
+                  <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-6">
                     Najchętniej wybierany domek położony najbliżej nurtu wody i pomostu wędkarskiego. Oferuje sielankowy, uspokajający widok na rzekę, śpiew ptaków bezpośrednio z tarasu, luksusowy aneks kuchenny, prywatny węzeł sanitarny z ciepłą wodą i grill.
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-2 bg-tawerna-dark/30 p-4 rounded-xl border border-tawerna-gold/10">
+                <div className="flex flex-col gap-2 bg-tawerna-dark/45 p-4 rounded-xl border border-tawerna-gold/20">
                   <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">ATUTY DOMKU:</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs text-tawerna-sand">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-sm text-tawerna-cream">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       <span>Bezpośrednio przy rzece</span>
@@ -461,7 +461,7 @@ export default function App() {
               <p className="font-serif font-bold italic text-tawerna-gold text-lg md:text-xl">
                 {TAVERN_HIGHLIGHTS.subtitle}
               </p>
-              <p className="text-base md:text-lg text-tawerna-sand/90 text-justify leading-relaxed">
+              <p className="text-base md:text-lg text-tawerna-cream text-left leading-relaxed">
                 Nasza nastrojowa Tawerna została stworzona, by karmić strudzonych wodniaków, rowerzystów i turystów poszukujących autentycznych smaków Kaszub. Przytulny kominek, ciemne naturalne drewno i bliskość szumu fal czynią każde danie wyjątkowym. Zapraszamy starszych, młodszych, całe rodziny!
               </p>
             </div>

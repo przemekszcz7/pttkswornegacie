@@ -123,7 +123,7 @@ Proszę o kontakt w sprawie dostępności terminu!`;
             Kalkulator Rezerwacji
           </h2>
           <div className="w-24 h-1 bg-tawerna-gold mx-auto rounded-full"></div>
-          <p className="max-w-2xl mx-auto text-tawerna-sand text-sm md:text-base mt-4 font-serif italic">
+          <p className="max-w-2xl mx-auto text-tawerna-cream text-base md:text-lg mt-4 font-serif italic leading-relaxed">
             Wybierz typ noclegu, liczbę dób, określ dodatkowe udogodnienia i oblicz szacunkową cenę pobytu na naszej przystani pod nowym zarządem!
           </p>
         </div>

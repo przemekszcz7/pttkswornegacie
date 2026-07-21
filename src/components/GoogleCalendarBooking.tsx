@@ -514,7 +514,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           
           {/* Visual Interactive Date Range Input (Flatpickr) */}
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-mono font-bold text-tawerna-sand uppercase tracking-wider">
+            <label className="block text-[11px] font-mono font-bold text-tawerna-cream uppercase tracking-wider">
               Termin pobytu (Przyjazd - Odjazd)
             </label>
             <div className="relative">
@@ -524,7 +524,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 type="text"
                 id={`calendar-${cottageKey}`}
                 placeholder="Kliknij, aby wybrać termin..."
-                className="w-full bg-tawerna-dark border border-tawerna-gold/20 focus:border-tawerna-gold rounded-lg pl-9 pr-3 py-2.5 text-xs text-white font-mono placeholder-tawerna-sand/40 cursor-pointer focus:outline-none focus:ring-0 transition duration-200"
+                className="w-full bg-tawerna-dark border border-tawerna-gold/35 focus:border-tawerna-gold rounded-lg pl-9 pr-3 py-2.5 text-xs text-white font-mono placeholder-white/50 cursor-pointer focus:outline-none focus:ring-1 focus:ring-tawerna-gold transition duration-200"
                 readOnly
                 required
               />
@@ -532,40 +532,36 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           </div>
 
           {/* Selected stay summary */}
-          {isDatesSelected ? (
-            <div className="bg-tawerna-gold/10 border border-tawerna-gold/15 p-3 rounded-lg flex justify-between items-center text-xs animate-fadeIn">
+          {isDatesSelected && (
+            <div className="bg-tawerna-gold/15 border border-tawerna-gold/30 p-3 rounded-lg flex justify-between items-center text-xs animate-fadeIn">
               <div className="text-left">
-                <p className="text-white font-semibold">Podsumowanie pobytu:</p>
-                <p className="text-[10px] text-tawerna-sand mt-0.5">
+                <p className="text-white font-bold">Podsumowanie pobytu:</p>
+                <p className="text-[11px] text-tawerna-cream mt-0.5">
                   Przyjazd: <strong className="text-white">{checkInDate}</strong>
                 </p>
-                <p className="text-[10px] text-tawerna-sand">
+                <p className="text-[11px] text-tawerna-cream">
                   Odjazd: <strong className="text-white">{checkOutDate}</strong> ({nights} {nights === 1 ? 'noc' : 'nocy'})
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-[10px] text-tawerna-sand">Cena łączna:</p>
-                <strong className="text-tawerna-gold text-sm font-mono">{totalPrice} zł</strong>
+                <strong className="text-tawerna-gold text-sm font-mono font-black">{totalPrice} zł</strong>
               </div>
-            </div>
-          ) : (
-            <div className="bg-tawerna-wood/10 border border-tawerna-gold/5 p-2.5 rounded-lg text-[10px] text-tawerna-sand/70 text-center leading-normal italic">
-              Wybierz przedział czasowy na interaktywnym kalendarzu, aby odblokować formularz rezerwacji.
             </div>
           )}
 
           {/* Guest Information form - Enabled only when dates are selected */}
-          <div className={`space-y-3 transition-all duration-300 ${isDatesSelected ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'}`}>
-            <div className="flex items-center gap-1.5 pb-1 border-b border-tawerna-gold/10">
-              <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase">
+          <div className={`space-y-3.5 transition-all duration-300 ${isDatesSelected ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'}`}>
+            <div className="flex items-center gap-1.5 pb-1 border-b border-tawerna-gold/20">
+              <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">
                 Dane osobowe rezerwującego
               </span>
-              {!isDatesSelected && <Lock className="w-3 h-3 text-tawerna-sand/40" />}
+              {!isDatesSelected && <Lock className="w-3.5 h-3.5 text-tawerna-sand/50" />}
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-tawerna-sand mb-0.5 flex items-center gap-1">
-                <User className="w-3 h-3 text-tawerna-gold" />
+              <label className="block text-[11px] font-bold text-tawerna-cream mb-1 flex items-center gap-1">
+                <User className="w-3.5 h-3.5 text-tawerna-gold" />
                 Imię i nazwisko *
               </label>
               <input
@@ -575,14 +571,14 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder={isDatesSelected ? "np. Jan Kowalski" : "Zablokowane"}
-                className="w-full bg-tawerna-dark border border-tawerna-gold/20 focus:border-tawerna-gold focus:outline-none rounded-lg p-2 text-xs text-white placeholder-tawerna-sand/20"
+                className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white placeholder-white/45 transition duration-200"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[10px] font-bold text-tawerna-sand mb-0.5 flex items-center gap-1">
-                  <Phone className="w-3 h-3 text-tawerna-gold" />
+                <label className="block text-[11px] font-bold text-tawerna-cream mb-1 flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5 text-tawerna-gold" />
                   Telefon *
                 </label>
                 <input
@@ -592,12 +588,12 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder={isDatesSelected ? "np. 798550017" : "Zablokowane"}
-                  className="w-full bg-tawerna-dark border border-tawerna-gold/20 focus:border-tawerna-gold focus:outline-none rounded-lg p-2 text-xs text-white font-mono placeholder-tawerna-sand/20"
+                  className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white font-mono placeholder-white/45 transition duration-200"
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-tawerna-sand mb-0.5 flex items-center gap-1">
-                  <Mail className="w-3 h-3 text-tawerna-gold" />
+                <label className="block text-[11px] font-bold text-tawerna-cream mb-1 flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5 text-tawerna-gold" />
                   E-mail *
                 </label>
                 <input
@@ -607,14 +603,14 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={isDatesSelected ? "np. jan@gmail.com" : "Zablokowane"}
-                  className="w-full bg-tawerna-dark border border-tawerna-gold/20 focus:border-tawerna-gold focus:outline-none rounded-lg p-2 text-xs text-white placeholder-tawerna-sand/20"
+                  className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white placeholder-white/45 transition duration-200"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-tawerna-sand mb-0.5 flex items-center gap-1">
-                <FileText className="w-3 h-3 text-tawerna-gold" />
+              <label className="block text-[11px] font-bold text-tawerna-cream mb-1 flex items-center gap-1">
+                <FileText className="w-3.5 h-3.5 text-tawerna-gold" />
                 Uwagi do rezerwacji (opcjonalnie)
               </label>
               <textarea
@@ -623,7 +619,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder={isDatesSelected ? "np. liczba gości, dzieci, specjalne życzenia..." : "Zablokowane"}
-                className="w-full bg-tawerna-dark border border-tawerna-gold/20 focus:border-tawerna-gold focus:outline-none rounded-lg p-2 text-xs text-white resize-none placeholder-tawerna-sand/20"
+                className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white resize-none placeholder-white/45 transition duration-200"
               />
             </div>
           </div>
@@ -650,36 +646,6 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
               </>
             )}
           </button>
-
-          {/* List of Booked Dates for Reference */}
-          <div className="mt-3 bg-tawerna-dark/30 border border-tawerna-gold/10 rounded-xl p-3">
-            <h5 className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider mb-2">
-              Bieżący stan zajętości kalendarza Google
-            </h5>
-            {loading ? (
-              <p className="text-[10px] text-tawerna-sand italic">Ładowanie zajętych terminów...</p>
-            ) : bookedRanges.length === 0 ? (
-              <p className="text-[10px] text-emerald-400">Brak zajętych terminów w najbliższym czasie.</p>
-            ) : (
-              <div className="max-h-24 overflow-y-auto space-y-1 pr-1 scrollbar-thin">
-                {bookedRanges.slice(0, 4).map((range, index) => (
-                  <div key={index} className="flex justify-between items-center text-[10px] bg-tawerna-dark/50 p-1.5 rounded border border-tawerna-gold/5">
-                    <span className="text-neutral-400 truncate max-w-[100px] italic">
-                      {range.summary}
-                    </span>
-                    <span className="text-tawerna-sand font-mono font-bold shrink-0">
-                      {range.start} – {range.end}
-                    </span>
-                  </div>
-                ))}
-                {bookedRanges.length > 4 && (
-                  <p className="text-[9px] text-tawerna-sand/40 text-center pt-0.5 italic">
-                    + {bookedRanges.length - 4} kolejnych rezerwacji
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
 
         </form>
       )}
