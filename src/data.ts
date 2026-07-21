@@ -1,4 +1,4 @@
-import { GalleryItem, AttractionItem, AccommodationType, FAQItem } from './types';
+import { GalleryItem, AttractionItem, AccommodationType } from './types';
 
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
@@ -207,25 +207,52 @@ export const TAVERN_HIGHLIGHTS = {
   ctaText: 'Zasmakuj w Tawernie'
 };
 
-export const FAQ_ITEMS: FAQItem[] = [
+export interface MenuItem {
+  name: string;
+  price: string;
+  description?: string;
+  tag?: string;
+}
+
+export interface MenuSection {
+  title: string;
+  items: MenuItem[];
+}
+
+export const TAVERN_MENU: MenuSection[] = [
   {
-    question: 'Czy na stanicy pod nowym zarządem zmieniły się warunki?',
-    answer: 'Tak! Od 4 kwietnia 2025 roku Stanica znajduje się pod całkiem nowym zarządem. Odświeżyliśmy i przygotowaliśmy domki, udoskonaliliśmy aneks kuchenny, poprawiliśmy standard łazienek oraz rozbudowaliśmy naszą Tawernę. Dbamy o najwyższą jakość usług, czystość i uśmiech na twarzach gości!'
+    title: 'Nasze Smażone Ryby',
+    items: [
+      { name: 'Pstrąg Smażony z Masłem Ziołowym', price: '14 zł / 100g', description: 'Świeży pstrąg z lokalnego potoku, chrupiąca skórka, aromatyczne masło z ziołami.', tag: 'Specjał Stanicy' },
+      { name: 'Sandacz Smażony (Filat)', price: '16 zł / 100g', description: 'Delikatne, soczyste filety z sandacza podawane z cytryną.', tag: 'Bardzo popularny' },
+      { name: 'Okoń z Patelni', price: '13 zł / 100g', description: 'Smażony na złoty kolor, tradycyjny przysmak rzek kaszubskich.' },
+      { name: 'Śledzik w Oleju z Cebulką', price: '16 zł / porcja', description: 'Tradycyjna, swojska przystawka.' }
+    ]
   },
   {
-    question: 'Jak mogę zarezerwować nocleg w domku lub miejsce kempingowe?',
-    answer: 'Najprostszą metodą gwarancji rezerwacji domku jest bezpośredni kontakt telefoniczny na numer +48 798 550 017, wysłanie zapytania mailowego na pttkswornegacie@gmail.com, skorzystanie z naszego formularza zapytań u dołu strony, bądź rezerwacja poprzez portal Booking.com. Pole namiotowe nie wymaga wcześniejszej rezerwacji – zapraszamy bezpośrednio po przybyciu!'
+    title: 'Rozgrzewające Zupy Domowe',
+    items: [
+      { name: 'Żurek Kociewski z Jajkiem i Kiełbasą', price: '18 zł', description: 'Na prawdziwym zakwasie, z białą kiełbasą, jajkiem i majerankiem.', tag: 'Klasyk' },
+      { name: 'Domowy Rosół z Makaronem', price: '15 zł', description: 'Sycący, gotowany na kilku rodzajach mięs, ze świeżą natką pietruszki.' },
+      { name: 'Flaki Wołowe po Staropolsku', price: '19 zł', description: 'Dobrze doprawione, rozgrzewające flaczki, podawane z chlebem.' }
+    ]
   },
   {
-    question: 'Czy akceptujecie zwierzęta domowe?',
-    answer: 'Tak, nasza Stanica jest w 100% przyjazna czworonogom! Zarówno w domkach, jak i na polu namiotowym Twoi pupile są mile widziani, o ile dbasz o ich bezpieczeństwo oraz czystość wokół nich.'
+    title: 'Tradycyjne Dania & Klasyki',
+    items: [
+      { name: 'Ręcznie Lepione Pierogi Ruskie', price: '22 zł / 8 szt.', description: 'Codziennie świeżo lepione na miejscu, podawane ze złocistą cebulką.', tag: 'Ręczna robota' },
+      { name: 'Ręcznie Lepione Pierogi z Mięsem', price: '24 zł / 8 szt.', description: 'Sycące, z farszem wieprzowo-wołowym, okraszone skwarkami.' },
+      { name: 'Chrupiące Placki Ziemniaczane', price: '18 zł / 3 szt.', description: 'Tarcia według tradycyjnej receptury, podawane ze śmietaną.' },
+      { name: 'Tradycyjny Kotlet Schabowy', price: '34 zł', description: 'Klasyk polskiego stołu podawany z purée ziemniaczanym i kapustą zasmażaną.' }
+    ]
   },
   {
-    question: 'Jak zorganizowane są spływy kajakowe?',
-    answer: 'Na miejscu dysponujemy profesjonalnym zapleczem floty kajakowej. Dobieramy trasę pod Twoje preferencje, zapewniamy kamizelki ratunkowe, wiosła i transport powrotny dla sprzętu oraz kajakarzy. Najpopularniejsze trasy to spływy Zbrzycą i Chociną.'
-  },
-  {
-    question: 'Czy na miejscu jest internet Wi-Fi?',
-    answer: 'Tak, dla gości naszej Tawerny oraz domków przygotowaliśmy darmową, bezprzewodową sieć Wi-Fi o dobrym zasięgu, dzięki czemu możesz bez problemu zaplanować dalszą trasę rowerową lub kajakową.'
+    title: 'Napoje Gorące & Zimne',
+    items: [
+      { name: 'Bogata Herbata Zimowa z Miodem', price: '14 zł', description: 'Z lipowym miodem, cytryną, pomarańczą i aromatycznymi goździkami.', tag: 'Rozgrzewająca' },
+      { name: 'Kawa z Ekspresu (Czarna / Biała)', price: '10 zł', description: 'Świeżo mielone ziarna doskonałej jakości.' },
+      { name: 'Zimne Piwo Lane z kija', price: '12 zł / 0.5L', description: 'Idealne orzeźwienie po słonecznym spływie kajakowym.' },
+      { name: 'Kompot Owocowy', price: '8 zł / szklanka', description: 'Tradycyjny, ze świeżych sezonowych owoców.' }
+    ]
   }
 ];

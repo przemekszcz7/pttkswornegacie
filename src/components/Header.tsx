@@ -19,11 +19,8 @@ export default function Header() {
 
   const navLinks = [
     { href: '#o-nas', label: 'O nas' },
-    { href: '#domki', label: 'Noclegi' },
-    { href: '#atrakcje', label: 'Atrakcje' },
-    { href: '#tawerna', label: 'Tawerna' },
-    { href: '#kalkulator', label: 'Kalkulator Pobytu' },
-    { href: '#galeria', label: 'Galeria' },
+    { href: '#zarezerwuj', label: 'Zarezerwuj nocleg' },
+    { href: '#tawerna', label: 'Tawerna menu' },
     { href: '#kontakt', label: 'Kontakt' },
   ];
 

@@ -1,44 +1,23 @@
 import { useState } from 'react';
 import Header from './components/Header';
-import Gallery from './components/Gallery';
-import Calculator from './components/Calculator';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
-import { ACCOMMODATIONS, ATTRACTIONS, TAVERN_HIGHLIGHTS } from './data';
+import GoogleCalendarBooking from './components/GoogleCalendarBooking';
+import { GALLERY_ITEMS, TAVERN_HIGHLIGHTS, TAVERN_MENU } from './data';
 import { 
-  Waves, 
-  Flame, 
-  Map, 
-  Anchor, 
-  Compass, 
   CheckCircle2, 
-  ChevronRight, 
   Coffee, 
-  Bike, 
-  Sparkles, 
-  BookOpen, 
   ArrowRight,
-  Sun,
+  Phone,
+  Calendar,
+  Utensils,
+  Home,
   ShieldCheck,
-  Award
+  BookOpen
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export default function App() {
-  const [activeAttraction, setActiveAttraction] = useState<string>('kajaki');
-
-  // Helper to map icon names from string to elements
-  const renderAttractionIcon = (name: string) => {
-    switch (name) {
-      case 'Compass': return <Compass className="w-5 h-5 text-tawerna-gold" />;
-      case 'Anchor': return <Anchor className="w-5 h-5 text-tawerna-gold" />;
-      case 'Bike': return <Bike className="w-5 h-5 text-tawerna-gold" />;
-      case 'Sun': return <Sun className="w-5 h-5 text-tawerna-gold" />;
-      case 'Flame': return <Flame className="w-5 h-5 text-tawerna-gold" />;
-      default: return <Waves className="w-5 h-5 text-tawerna-gold" />;
-    }
-  };
-
   return (
     <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
       
@@ -46,13 +25,13 @@ export default function App() {
       <Header />
 
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center justify-center pt-24 pb-16 overflow-hidden">
         {/* Full-screen background layout */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://i.ibb.co/7d1VVg6g/612601370-122167983416823864-1256427580816765474-n.jpg"
             alt="Stanica Swornegacie zachód słońca"
-            className="w-full h-full object-cover select-none filter brightness-[0.35]"
+            className="w-full h-full object-cover select-none filter brightness-[0.3]"
             referrerPolicy="no-referrer"
           />
           {/* Gradients to transition smoothly */}
@@ -60,138 +39,127 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-r from-tawerna-dark/80 via-transparent to-tawerna-dark/40"></div>
         </div>
 
-        {/* Floating background dust */}
-        <div className="absolute inset-0 pointer-events-none organic-bg opacity-30 z-0"></div>
-
         {/* Core Hero Content */}
         <div className="max-w-5xl mx-auto px-4 md:px-8 text-center relative z-10 flex flex-col items-center gap-6 mt-8">
           
-
-
-          {/* Heading with Serif/Display combo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            transition={{ duration: 0.7 }}
             className="flex flex-col items-center"
           >
-            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-7xl leading-tight tracking-tight text-white glow-gold uppercase">
-              Stanica Wodna <span className="text-tawerna-gold block font-serif lowercase italic font-normal text-2xl sm:text-4xl md:text-5xl tracking-normal mt-1 text-balance">i Tawerna PTTK Swornegacie</span>
+            <h1 className="font-display font-black text-4xl sm:text-6xl md:text-8xl leading-tight tracking-tight text-white glow-gold uppercase">
+              Stanica Wodna <span className="text-tawerna-gold block font-serif lowercase italic font-normal text-3xl sm:text-5xl md:text-6xl tracking-normal mt-2 text-balance">i Tawerna Swornegacie</span>
             </h1>
+            <p className="max-w-2xl text-tawerna-sand text-lg md:text-xl mt-6 font-serif italic text-balance">
+              Tradycyjny kaszubski urok, komfortowe drewniane domki i smaczna domowa kuchnia nad samą rzeką Zbrzyca.
+            </p>
           </motion.div>
 
-
-
-          {/* Call to actions */}
+          {/* Large, clear, highly legible Call to Actions for easy reading */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            className="flex flex-col sm:flex-row gap-3.5 mt-4 w-full sm:w-auto"
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 mt-6 w-full sm:w-auto"
           >
             <a
-              href="#domki"
-              className="px-6 py-3.5 bg-tawerna-gold hover:bg-tawerna-gold-hover text-tawerna-dark font-sans font-bold text-sm rounded-lg transition-all shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
+              href="#zarezerwuj"
+              className="px-8 py-4 bg-tawerna-gold hover:bg-tawerna-gold-hover text-tawerna-dark font-sans font-bold text-base md:text-lg rounded-xl transition-all shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
             >
-              <BookOpen className="w-4 h-4" />
-              Oferta Noclegów
+              <BookOpen className="w-5 h-5" />
+              Zarezerwuj nocleg
             </a>
             
             <a
               href="#tawerna"
-              className="px-6 py-3.5 bg-[#3a2216]/80 hover:bg-[#3a2216] border border-tawerna-gold/30 hover:border-tawerna-gold text-tawerna-cream font-sans font-bold text-sm rounded-lg transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+              className="px-8 py-4 bg-[#3a2216]/90 hover:bg-[#3a2216] border-2 border-tawerna-gold/45 hover:border-tawerna-gold text-tawerna-cream font-sans font-bold text-base md:text-lg rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Coffee className="w-4 h-4 text-tawerna-gold" />
-              Tawerna i Gastronomia
+              <Coffee className="w-5 h-5 text-tawerna-gold" />
+              Tawerna menu
             </a>
 
             <a
-              href="https://www.booking.com/hotel/pl/stanica-wodna-swornegacie-pttk.pl.html?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExZHRFUUZ5UkJOeUNvNDF6WHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR7m9PavEFXFD2BdhVWaFKkMYUuFrqymsA8SejjI2MOdusXFqqKZ4y2mGns6TQ_aem_9L2AcMXvUiZt6Fx13IJByA&chal_t=1779527224279&force_referer="
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3.5 bg-[#003580] hover:bg-[#002244] text-white font-sans font-bold text-sm rounded-lg transition-all shadow-xl flex items-center justify-center gap-1 cursor-pointer"
+              href="tel:+48798550017"
+              className="px-8 py-4 bg-emerald-700 hover:bg-emerald-800 text-white font-sans font-bold text-base md:text-lg rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
             >
-              Zarezerwuj na Booking.com
-              <ArrowRight className="w-4 h-4" />
+              <Phone className="w-5 h-5" />
+              Zadzwoń: 798 550 017
             </a>
           </motion.div>
 
         </div>
-
-        {/* Decorative subtle bottom wave */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-tawerna-dark to-transparent z-10 pointer-events-none"></div>
       </section>
 
 
-      {/* 2. "O NAS" & NEW MANAGEMENT PRESENTATION */}
-      <section id="o-nas" className="py-24 bg-tawerna-dark relative overflow-hidden">
+      {/* 2. SECTION: O NAS (id="o-nas") */}
+      <section id="o-nas" className="py-24 bg-tawerna-dark border-t border-tawerna-gold/15 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left Column: Story text */}
+            {/* Story text with larger, more legible font sizes */}
             <div className="lg:col-span-7 flex flex-col gap-6 text-left">
               <div className="flex items-center gap-2 text-tawerna-gold">
-                <ShieldCheck className="w-5 h-5" />
-                <span className="font-display tracking-widest text-xs font-bold uppercase">Nowy Rozdział Od 2025</span>
+                <ShieldCheck className="w-6 h-6" />
+                <span className="font-display tracking-widest text-sm font-bold uppercase">Nowy Rozdział Od 2025 Roku</span>
               </div>
               
-              <h2 className="font-display font-black text-3xl md:text-5xl text-tawerna-cream tracking-tight leading-tight">
+              <h2 className="font-display font-black text-4xl md:text-5xl text-tawerna-cream tracking-tight leading-tight">
                 Pod Nowym Zarządem <br />
-                <span className="text-tawerna-gold font-serif italic text-2xl md:text-4xl font-normal">Serca Borów Tucholskich</span>
+                <span className="text-tawerna-gold font-serif italic text-3xl md:text-4xl font-normal">Serca Borów Tucholskich</span>
               </h2>
 
-              <p className="font-serif italic text-tawerna-sand text-md border-l-2 border-tawerna-gold pl-4 leading-relaxed">
-                „Stanica Wodna PTTK w Swornegaciach od 4 kwietnia 2025 roku zyskała nowy oddech pod świeżym i pełnym pasji zarządem. Naszym celem jest połączenie tradycyjnego, kaszubskiego dziedzictwa z maksymalnym komfortem naszych Gości.”
+              <p className="font-serif italic text-tawerna-sand text-lg md:text-xl border-l-4 border-tawerna-gold pl-4 leading-relaxed bg-tawerna-wood/15 py-3 pr-2 rounded-r-lg">
+                „Stanica Wodna PTTK w Swornegaciach od 4 kwietnia 2025 roku zyskała nowy oddech pod świeżym i pełnym pasji zarządem. Naszym celem jest połączenie kaszubskiego dziedzictwa z maksymalnym komfortem naszych Gości.”
               </p>
 
-              <p className="text-sm md:text-base leading-relaxed text-justify text-tawerna-sand/90">
-                Położona przy samej rzece <strong>Zbrzyca</strong>, u wrót Jeziora Witoczno, nasza stanica to wymarzone miejsce dla pasjonatów leśnej ciszy, pasjonatów wędkarstwa, wycieczek rowerowych i miłośników spływów kajakowych. Przygotowaliśmy dla Państwa w pełni komfortowe, pachnące lasem, drewniane domki, odnowione zaplecze sanitarne pola namiotowego oraz rustic tawernę biesiadną tętniącą staropolskimi i kaszubskimi smakami.
+              <p className="text-base md:text-lg leading-relaxed text-tawerna-sand/90 text-justify">
+                Położona przy samej malowniczej rzece <strong>Zbrzyca</strong>, u ujścia do Jeziora Witoczno, nasza stanica to wymarzone miejsce dla pasjonatów leśnej ciszy, wycieczek rowerowych, wędkarstwa i spływów kajakowych. Przygotowaliśmy dla Państwa w pełni zmodernizowane, pachnące świeżym lasem, drewniane domki, odnowione zaplecze sanitarne pola namiotowego oraz klimatyczną tawernę biesiadną tętniącą staropolskimi i kaszubskimi smakami.
               </p>
 
-              {/* USP grid indicators */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                <div className="flex gap-2.5 items-start">
-                  <CheckCircle2 className="w-4 h-4 text-tawerna-gold flex-shrink-0 mt-1" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-4">
+                <div className="flex gap-3 items-start">
+                  <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-serif font-bold text-sm text-tawerna-cream">Komfortowe domki</h4>
-                    <p className="text-xs text-tawerna-sand">Prywatne łazienki, świetnie wyposażone aneksy kuchenne i zaciszne tarasy.</p>
+                    <h4 className="font-serif font-bold text-base text-tawerna-cream">Przytulne domki</h4>
+                    <p className="text-sm text-tawerna-sand">Prywatna łazienka z ciepłą wodą, aneks kuchenny, taras i grill.</p>
                   </div>
                 </div>
 
-                <div className="flex gap-2.5 items-start">
-                  <CheckCircle2 className="w-4 h-4 text-tawerna-gold flex-shrink-0 mt-1" />
+                <div className="flex gap-3 items-start">
+                  <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-serif font-bold text-sm text-tawerna-cream">Tawerna z klimatem</h4>
-                    <p className="text-xs text-tawerna-sand">Ciemne drewno, ciepła herbata, chłodne piwo i aromatyczne ryby na gorąco.</p>
+                    <h4 className="font-serif font-bold text-base text-tawerna-cream">Tawerna z klimatem</h4>
+                    <p className="text-sm text-tawerna-sand">Pyszne domowe jedzenie, świeża smażona ryba i chłodne napoje.</p>
                   </div>
                 </div>
 
-                <div className="flex gap-2.5 items-start">
-                  <CheckCircle2 className="w-4 h-4 text-tawerna-gold flex-shrink-0 mt-1" />
+                <div className="flex gap-3 items-start">
+                  <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-serif font-bold text-sm text-tawerna-cream">Raj sportów wodnych</h4>
-                    <p className="text-xs text-tawerna-sand">Bezpośrednia linia brzegowa rzeki, własne pomosty wędkarskie i baza spływowa.</p>
+                    <h4 className="font-serif font-bold text-base text-tawerna-cream">Raj dla aktywnych</h4>
+                    <p className="text-sm text-tawerna-sand">Wypożyczalnia kajaków na miejscu, rzeka Zbrzyca, pomosty i ogniska.</p>
                   </div>
                 </div>
 
-                <div className="flex gap-2.5 items-start">
-                  <CheckCircle2 className="w-4 h-4 text-tawerna-gold flex-shrink-0 mt-1" />
+                <div className="flex gap-3 items-start">
+                  <CheckCircle2 className="w-5 h-5 text-tawerna-gold flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-serif font-bold text-sm text-tawerna-cream">Malowniczy odpoczynek</h4>
-                    <p className="text-xs text-tawerna-sand">Wieczorne ogniska, hamaki i leżaki w cieniu sosen przy śpiewie ptaków.</p>
+                    <h4 className="font-serif font-bold text-base text-tawerna-cream">Cisza i spokój</h4>
+                    <p className="text-sm text-tawerna-sand">Piękny las sosnowy, śpiew ptaków i bezpośredni kontakt z naturą.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Visual card with PTTK Logo badge & photos */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-              <div className="w-full aspect-[4/5] overflow-hidden rounded-xl wood-frame relative">
+            {/* Right Column: Beautiful main picture */}
+            <div className="lg:col-span-5 flex flex-col gap-4">
+              <div className="w-full aspect-[4/5] overflow-hidden rounded-2xl wood-frame relative shadow-2xl">
                 <img
                   src="https://i.ibb.co/HpzPyBF7/646397278-122175493676823864-3970029122686148013-n.jpg"
                   alt="Zbrzyca Swornegacie ogródek"
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+                  className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -199,203 +167,282 @@ export default function App() {
 
           </div>
 
+          {/* Simple, clear integrated photo gallery so they can see everything in one place without clicks */}
+          <div className="mt-20 border-t border-tawerna-gold/10 pt-12">
+            <h3 className="font-display font-bold text-2xl text-tawerna-cream mb-8 text-center uppercase tracking-wider">
+              Zdjęcia Naszej Stanicy
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {GALLERY_ITEMS.slice(0, 4).map((item) => (
+                <div key={item.id} className="aspect-[4/3] rounded-xl overflow-hidden border border-tawerna-gold/20 shadow-md">
+                  <img
+                    src={item.url}
+                    alt={item.title}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
 
-      {/* 3. NOCLEGI (DOMKI & POLE KAMPINGOWE) */}
-      <section id="domki" className="py-24 bg-tawerna-wood/20 border-t border-tawerna-gold/10 relative">
+      {/* 3. SECTION: ZAREZERWUJ NOCLEG (id="zarezerwuj") */}
+      <section id="zarezerwuj" className="py-24 bg-tawerna-wood/25 border-y border-tawerna-gold/15 relative">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           
-          {/* Section info */}
           <div className="text-center mb-16">
             <div className="flex items-center justify-center gap-2 text-tawerna-gold mb-3">
-              <Award className="w-5 h-5" />
-              <span className="font-display tracking-widest text-xs font-bold uppercase">Baza Noclegowa Swornegacie</span>
+              <Home className="w-6 h-6" />
+              <span className="font-display tracking-widest text-sm font-bold uppercase">Prosty i szybki wybór</span>
             </div>
-            <h2 className="font-display font-black text-3xl md:text-5xl text-tawerna-cream tracking-tight mb-4">
-              Nasza Oferta Noclegów
+            <h2 className="font-display font-black text-4xl md:text-5xl text-tawerna-cream tracking-tight mb-4 text-balance">
+              Wybierz Domek i Zarezerwuj
             </h2>
-            <div className="w-24 h-1 bg-tawerna-gold mx-auto rounded-full"></div>
-            <p className="max-w-xl mx-auto text-tawerna-sand text-sm md:text-base mt-4 font-serif italic">
-              Zapewniamy zróżnicowane możliwości odpoczynku – poczuj kameralność naszych domków z pełnym węzłem sanitarnym lub doświadcz przygody na trawiastym polu kempingowym.
+            <p className="max-w-2xl mx-auto text-tawerna-sand text-lg md:text-xl font-serif italic text-balance">
+              Przygotowaliśmy trzy komfortowe, pachnące drewnem domki letniskowe. Wybierz termin na kalendarzyku obok domku i wyślij zgłoszenie – to banalnie proste!
             </p>
           </div>
 
-          {/* Accommodation Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
-            {ACCOMMODATIONS.map((accom) => (
-              <div 
-                key={accom.id} 
-                className="group flex flex-col justify-between rounded-xl overflow-hidden wood-card-border p-5 border border-tawerna-gold/15 bg-tawerna-wood/85 shadow-lg transition-transform hover:-translate-y-1 duration-300"
-              >
+          {/* Vertical list of cottages - incredibly readable and structured */}
+          <div className="flex flex-col gap-16 max-w-6xl mx-auto mb-20">
+            
+            {/* 1. DOMEK DWUOSOBOWY */}
+            <div className="bg-[#1a0e08]/90 border-2 border-tawerna-gold/30 rounded-3xl p-6 md:p-8 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Text Info */}
+              <div className="lg:col-span-4 flex flex-col justify-between h-full text-left">
                 <div>
-                  {/* Photo Frame */}
-                  <div className="w-full aspect-[16/10] overflow-hidden rounded-lg mb-5 relative border border-tawerna-gold/10">
-                    <img
-                      src={accom.imageUrl}
-                      alt={accom.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute top-3 right-3 bg-tawerna-dark/90 border border-tawerna-gold/20 text-tawerna-gold px-3 py-1 font-sans text-xs font-bold rounded-full">
-                      {accom.capacity}
-                    </div>
-                  </div>
-
-                  {/* Text Details */}
-                  <h3 className="font-display text-xl md:text-2xl font-black text-tawerna-cream group-hover:text-tawerna-gold transition mb-1 text-left">
-                    {accom.title}
+                  <span className="px-3 py-1 bg-tawerna-gold/10 text-tawerna-gold rounded-full text-xs font-mono font-bold tracking-wider uppercase inline-block mb-3 border border-tawerna-gold/25">
+                    DLA 2 OSÓB
+                  </span>
+                  <h3 className="font-display font-black text-3xl text-white tracking-tight mb-1">
+                    Domek Dwuosobowy
                   </h3>
-                  <p className="text-xs font-serif font-bold italic text-tawerna-gold text-left mb-3">
-                    {accom.subtitle}
+                  <p className="font-serif italic text-tawerna-gold text-sm mb-4">
+                    Klimatyczna, drewniana przystań idealna dla par
                   </p>
-                  <p className="text-xs md:text-sm text-tawerna-sand/90 text-left leading-relaxed mb-6">
-                    {accom.description}
-                  </p>
-
-                  {/* Bullet features */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-left mb-6">
-                    {accom.features.map((feat, idx) => (
-                      <div key={idx} className="flex gap-2 items-center text-xs text-tawerna-sand">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-tawerna-gold flex-shrink-0" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
+                  
+                  <div className="bg-tawerna-dark/50 p-4 rounded-xl border border-tawerna-gold/15 mb-4">
+                    <span className="block text-[10px] font-mono text-tawerna-sand uppercase tracking-wider">CENA PROSTOWA:</span>
+                    <span className="font-sans font-black text-tawerna-gold text-2xl">180 zł</span> <span className="text-sm text-tawerna-sand font-serif italic">/ doba</span>
                   </div>
+
+                  <p className="text-sm md:text-base text-tawerna-sand leading-relaxed mb-6">
+                    Przytulne wnętrze pachnące sosnowym lasem. Domek wyposażony jest w prywatną łazienkę z ciepłą wodą, w pełni sprawny aneks kuchenny z lodówką i płytą grzewczą, wygodne łoże małżeńskie oraz zadaszony taras z meblami ogrodowymi i prywatnym grillem.
+                  </p>
                 </div>
 
-                {/* Footer price & cta */}
-                <div className="pt-4 border-t border-tawerna-gold/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-left w-full sm:w-auto">
-                    <span className="block text-[10px] font-mono text-tawerna-sand">SZACUNKOWY KOSZT:</span>
-                    <span className="font-sans font-black text-tawerna-gold text-lg lg:text-xl">{accom.priceEstimate}</span>
-                  </div>
-                  <div className="flex gap-2 w-full sm:w-auto">
-                    <a
-                      href="#kalkulator"
-                      className="flex-1 sm:flex-initial text-center px-4 py-2 bg-tawerna-wood-light hover:bg-tawerna-dark border border-tawerna-gold/20 hover:border-tawerna-gold text-tawerna-cream text-xs font-bold rounded transition"
-                    >
-                      Kalkulator wyceny
-                    </a>
-                    <a
-                      href="https://www.booking.com/hotel/pl/stanica-wodna-swornegacie-pttk.pl.html?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExZHRFUUZ5UkJOeUNvNDF6WHNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR7m9PavEFXFD2BdhVWaFKkMYUuFrqymsA8SejjI2MOdusXFqqKZ4y2mGns6TQ_aem_9L2AcMXvUiZt6Fx13IJByA&chal_t=1779527224279&force_referer="
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-grow sm:flex-initial text-center px-4 py-2 bg-[#003580] hover:bg-[#002244] text-white text-xs font-bold rounded shadow transition"
-                    >
-                      Zarezerwuj
-                    </a>
+                <div className="flex flex-col gap-2 bg-tawerna-dark/30 p-4 rounded-xl border border-tawerna-gold/10">
+                  <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">ATUTY DOMKU:</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs text-tawerna-sand">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Łoże małżeńskie</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Aneks kuchenny</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Łazienka z prysznicem</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Taras i grill</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
 
-        </div>
-      </section>
+              {/* Photo */}
+              <div className="lg:col-span-4 h-full flex flex-col justify-center">
+                <div className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl border-2 border-tawerna-gold/20 shadow-lg relative group">
+                  <img
+                    src="https://i.ibb.co/rfFNFkdn/645652060-122175493232823864-2357191817385338388-n.jpg"
+                    alt="Domek dwuosobowy drewniany letniskowy"
+                    className="w-full h-full object-cover group-hover:scale-102 transition duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
 
-
-      {/* 4. ATRAKCJE I REKREACJA INTERACTIVE GRID */}
-      <section id="atrakcje" className="py-24 bg-tawerna-dark relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-2 text-tawerna-gold mb-3">
-              <Compass className="w-5 h-5" />
-              <span className="font-display tracking-widest text-xs font-bold uppercase">U nas nie ma nudy</span>
-            </div>
-            <h2 className="font-display font-black text-3xl md:text-5xl text-tawerna-cream tracking-tight mb-4">
-              Atrakcje &amp; Aktywności
-            </h2>
-            <div className="w-24 h-1 bg-tawerna-gold mx-auto rounded-full"></div>
-            <p className="max-w-xl mx-auto text-tawerna-sand text-sm md:text-base mt-4 font-serif italic">
-              Niezależnie od tego, czy przybywasz na kajakach, szukasz ciszy z wędką na pomoście, czy mknesz rowerem leśnymi duktami – nasza lokalizacja oferuje wszystko.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto">
-            
-            {/* Left Nav menu for attractions tabs */}
-            <div className="lg:col-span-4 flex flex-col gap-2 bg-tawerna-wood/45 border border-tawerna-gold/10 p-3 rounded-xl">
-              {ATTRACTIONS.map((attr) => (
-                <button
-                  key={attr.id}
-                  onClick={() => setActiveAttraction(attr.id)}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-lg font-serif font-bold text-sm tracking-wide text-left transition duration-200 cursor-pointer ${
-                    activeAttraction === attr.id
-                      ? 'bg-tawerna-gold text-tawerna-dark font-extrabold shadow-md'
-                      : 'text-tawerna-cream hover:bg-tawerna-wood/70'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {renderAttractionIcon(attr.iconName)}
-                    <span>{attr.title}</span>
-                  </div>
-                  <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${
-                    activeAttraction === attr.id ? 'translate-x-1' : 'opacity-40'
-                  }`} />
-                </button>
-              ))}
+              {/* Interactive Calendar and Reserve action */}
+              <div className="lg:col-span-4 h-full">
+                <GoogleCalendarBooking
+                  cottageKey="domek-1"
+                  pricePerDay={180}
+                />
+              </div>
             </div>
 
-            {/* Right Tab panel display with elegant details */}
-            <div className="lg:col-span-8 bg-tawerna-wood/80 md:p-8 p-6 rounded-xl border-2 border-tawerna-gold/15 min-h-[380px] flex flex-col md:flex-row gap-6 items-stretch shadow-inner">
-              {ATTRACTIONS.filter(a => a.id === activeAttraction).map((attr) => (
-                <div key={attr.id} className="flex flex-col md:flex-row gap-6 w-full text-left justify-between items-start">
+
+            {/* 2. DOMEK TRZYOSOBOWY (ZATOKA) */}
+            <div className="bg-[#1a0e08]/90 border-2 border-tawerna-gold/30 rounded-3xl p-6 md:p-8 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Text Info */}
+              <div className="lg:col-span-4 flex flex-col justify-between h-full text-left">
+                <div>
+                  <span className="px-3 py-1 bg-tawerna-gold/10 text-tawerna-gold rounded-full text-xs font-mono font-bold tracking-wider uppercase inline-block mb-3 border border-tawerna-gold/25">
+                    DLA 3 OSÓB (STANDARD)
+                  </span>
+                  <h3 className="font-display font-black text-3xl text-white tracking-tight mb-1">
+                    Domek Trzyosobowy
+                  </h3>
+                  <p className="font-serif italic text-tawerna-gold text-sm mb-4">
+                    Komfortowy wypoczynek dla małej rodziny lub przyjaciół
+                  </p>
                   
-                  {/* Text details inside the Tab panel */}
-                  <div className="flex-1 flex flex-col gap-4">
-                    <span className="font-display text-[10px] uppercase font-bold tracking-widest text-tawerna-gold">Do Twojej dyspozycji</span>
-                    <h3 className="font-serif font-black text-2xl text-tawerna-cream leading-tight">{attr.title}</h3>
-                    <p className="text-xs md:text-sm text-tawerna-sand italic leading-relaxed">{attr.description}</p>
-                    
-                    <div className="flex flex-col gap-2 mt-2">
-                      {attr.details.map((detail, idx) => (
-                        <div key={idx} className="flex gap-2 items-start text-xs text-tawerna-sand">
-                          <CheckCircle2 className="w-4 h-4 text-tawerna-gold flex-shrink-0 mt-0.5" />
-                          <span>{detail}</span>
-                        </div>
-                      ))}
+                  <div className="bg-tawerna-dark/50 p-4 rounded-xl border border-tawerna-gold/15 mb-4">
+                    <span className="block text-[10px] font-mono text-tawerna-sand uppercase tracking-wider">CENA PROSTOWA:</span>
+                    <span className="font-sans font-black text-tawerna-gold text-2xl">220 zł</span> <span className="text-sm text-tawerna-sand font-serif italic">/ doba</span>
+                  </div>
+
+                  <p className="text-sm md:text-base text-tawerna-sand leading-relaxed mb-6">
+                    Szeroki, rodzinny domek letniskowy z pełnym węzłem sanitarnym (ciepła woda, prysznic, WC) oraz w pełni zaopatrzoną kuchnią. W środku znajduje się jedno łóżko małżeńskie (dwuosobowe) oraz jedno łóżko pojedyncze. Przy wejściu duży zadaszony taras i meble wypoczynkowe.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-2 bg-tawerna-dark/30 p-4 rounded-xl border border-tawerna-gold/10">
+                  <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">ATUTY DOMKU:</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs text-tawerna-sand">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Łóżko 2-os. + łóżko 1-os.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>W pełni wyposażona kuchnia</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Łazienka z prysznicem</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Drewniany, duży taras</span>
                     </div>
                   </div>
+                </div>
+              </div>
 
-                  {/* Photo frame inside the Tab panel */}
-                  <div className="w-full md:w-[220px] shrink-0 aspect-[4/3] md:aspect-[3/4] rounded-lg overflow-hidden border border-tawerna-gold/20 shadow-lg">
-                    <img
-                      src={attr.imageUrl}
-                      alt={attr.title}
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
+              {/* Photo */}
+              <div className="lg:col-span-4 h-full flex flex-col justify-center">
+                <div className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl border-2 border-tawerna-gold/20 shadow-lg relative group">
+                  <img
+                    src="https://i.ibb.co/q3P07dQS/646531341-122175689648823864-7407450498153030862-n.jpg"
+                    alt="Nowe wnętrze i kuchnia w domku letniskowym"
+                    className="w-full h-full object-cover group-hover:scale-102 transition duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
+
+              {/* Interactive Calendar and Reserve action */}
+              <div className="lg:col-span-4 h-full">
+                <GoogleCalendarBooking
+                  cottageKey="domek-2"
+                  pricePerDay={220}
+                />
+              </div>
+            </div>
+
+
+            {/* 3. DOMEK TRZYOSOBOWY (RZEKA) */}
+            <div className="bg-[#1a0e08]/90 border-2 border-tawerna-gold/30 rounded-3xl p-6 md:p-8 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Text Info */}
+              <div className="lg:col-span-4 flex flex-col justify-between h-full text-left">
+                <div>
+                  <span className="px-3 py-1 bg-tawerna-gold/10 text-tawerna-gold rounded-full text-xs font-mono font-bold tracking-wider uppercase inline-block mb-3 border border-tawerna-gold/25">
+                    DLA 3 OSÓB (WIDOKOWY)
+                  </span>
+                  <h3 className="font-display font-black text-3xl text-white tracking-tight mb-1">
+                    Domek Trzyosobowy Premium
+                  </h3>
+                  <p className="font-serif italic text-tawerna-gold text-sm mb-4">
+                    Wyjątkowe położenie tuż nad brzegiem rzeki Zbrzycy
+                  </p>
+                  
+                  <div className="bg-tawerna-dark/50 p-4 rounded-xl border border-tawerna-gold/15 mb-4">
+                    <span className="block text-[10px] font-mono text-tawerna-sand uppercase tracking-wider">CENA PROSTOWA:</span>
+                    <span className="font-sans font-black text-tawerna-gold text-2xl">240 zł</span> <span className="text-sm text-tawerna-sand font-serif italic">/ doba</span>
                   </div>
 
+                  <p className="text-sm md:text-base text-tawerna-sand leading-relaxed mb-6">
+                    Najchętniej wybierany domek położony najbliżej nurtu wody i pomostu wędkarskiego. Oferuje sielankowy, uspokajający widok na rzekę, śpiew ptaków bezpośrednio z tarasu, luksusowy aneks kuchenny, prywatny węzeł sanitarny z ciepłą wodą i grill.
+                  </p>
                 </div>
-              ))}
+
+                <div className="flex flex-col gap-2 bg-tawerna-dark/30 p-4 rounded-xl border border-tawerna-gold/10">
+                  <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">ATUTY DOMKU:</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 text-xs text-tawerna-sand">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Bezpośrednio przy rzece</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Widok z tarasu na wodę</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Aneks kuchenny + Łazienka</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <span>Najcichsza leśna strefa</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Photo */}
+              <div className="lg:col-span-4 h-full flex flex-col justify-center">
+                <div className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl border-2 border-tawerna-gold/20 shadow-lg relative group">
+                  <img
+                    src="https://i.ibb.co/HpzPyBF7/646397278-122175493676823864-3970029122686148013-n.jpg"
+                    alt="Domek z widokiem na przystań i wodę"
+                    className="w-full h-full object-cover group-hover:scale-102 transition duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
+
+              {/* Interactive Calendar and Reserve action */}
+              <div className="lg:col-span-4 h-full">
+                <GoogleCalendarBooking
+                  cottageKey="domek-3"
+                  pricePerDay={240}
+                />
+              </div>
             </div>
 
           </div>
+
+          {/* Interactive Google Calendar Booking widget removed - integrated directly with cottages */}
 
         </div>
       </section>
 
 
-      {/* 5. TAWERNA Z GASTRONOMIĄ SPECIAL HERO */}
-      <section id="tawerna" className="py-24 bg-[#1a0e08] border-y border-tawerna-gold/15 relative overflow-hidden">
+      {/* 4. SECTION: TAWERNA MENU (id="tawerna") */}
+      <section id="tawerna" className="py-24 bg-[#140a04] border-b border-tawerna-gold/15 relative overflow-hidden">
         {/* Full circular foliage decor */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-tawerna-gold/5 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center max-w-6xl mx-auto">
-            
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center max-w-6xl mx-auto mb-16">
             {/* Left Photo */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
-              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden wood-frame">
+              <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden wood-frame shadow-xl">
                 <img
                   src={TAVERN_HIGHLIGHTS.imageUrl}
                   alt="Tawerna PTTK wnętrze ciemne drewno"
-                  className="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-500"
+                  className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -404,45 +451,75 @@ export default function App() {
             {/* Right text panel */}
             <div className="lg:col-span-7 flex flex-col gap-6 text-left">
               <div className="flex items-center gap-2 text-tawerna-gold">
-                <Coffee className="w-5 h-5" />
-                <span className="font-display tracking-widest text-xs font-bold uppercase">Swojskie zapachy we wnętrzu</span>
+                <Coffee className="w-6 h-6" />
+                <span className="font-display tracking-widest text-sm font-bold uppercase">Swojskie Zapachy i Klimat</span>
               </div>
 
-              <h2 className="font-display font-black text-3xl md:text-5xl text-tawerna-cream tracking-tight leading-tight uppercase">
+              <h2 className="font-display font-black text-4xl md:text-5xl text-tawerna-cream tracking-tight leading-tight uppercase">
                 {TAVERN_HIGHLIGHTS.title}
               </h2>
-              <p className="font-serif font-bold italic text-tawerna-gold text-lg">
+              <p className="font-serif font-bold italic text-tawerna-gold text-lg md:text-xl">
                 {TAVERN_HIGHLIGHTS.subtitle}
               </p>
-              <p className="text-xs md:text-sm text-tawerna-sand/90 text-justify leading-relaxed">
-                {TAVERN_HIGHLIGHTS.description}
+              <p className="text-base md:text-lg text-tawerna-sand/90 text-justify leading-relaxed">
+                Nasza nastrojowa Tawerna została stworzona, by karmić strudzonych wodniaków, rowerzystów i turystów poszukujących autentycznych smaków Kaszub. Przytulny kominek, ciemne naturalne drewno i bliskość szumu fal czynią każde danie wyjątkowym. Zapraszamy starszych, młodszych, całe rodziny!
               </p>
+            </div>
+          </div>
 
-              {/* Culinary highlights */}
-              <div className="flex flex-col gap-2 mt-2">
-                {TAVERN_HIGHLIGHTS.features.map((feature, idx) => (
-                  <div key={idx} className="flex gap-2.5 items-start text-xs text-tawerna-sand/90 leading-tight">
-                    <CheckCircle2 className="w-4 h-4 text-tawerna-gold flex-shrink-0 mt-0.5" />
-                    <span>{feature}</span>
+          {/* BEAUTIFUL, SENIOR-FRIENDLY DIGITAL RESTAURANT MENU */}
+          <div className="max-w-5xl mx-auto mt-16 bg-[#1a0e08]/95 border-2 border-tawerna-gold/40 p-6 md:p-12 rounded-3xl shadow-2xl relative">
+            
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-2 text-tawerna-gold mb-2">
+                <Utensils className="w-5 h-5" />
+                <span className="font-display text-xs tracking-widest uppercase font-bold">Karta dań i napojów</span>
+              </div>
+              <h3 className="font-serif font-bold text-2xl md:text-4xl text-white">Menu Naszej Tawerny</h3>
+              <div className="w-16 h-0.5 bg-tawerna-gold mx-auto mt-3"></div>
+            </div>
+
+            {/* Menu sections layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {TAVERN_MENU.map((section, idx) => (
+                <div key={idx} className="flex flex-col gap-6 text-left">
+                  {/* Section Title with high-contrast background strip */}
+                  <h4 className="font-serif font-black text-xl md:text-2xl text-tawerna-gold pb-2 border-b border-tawerna-gold/30">
+                    {section.title}
+                  </h4>
+                  
+                  {/* Items loop */}
+                  <div className="flex flex-col gap-6">
+                    {section.items.map((item, itemIdx) => (
+                      <div key={itemIdx} className="flex flex-col gap-1 group">
+                        <div className="flex justify-between items-baseline gap-4">
+                          <h5 className="font-serif font-bold text-base md:text-lg text-white flex-1">
+                            {item.name}
+                            {item.tag && (
+                              <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-sans font-bold uppercase rounded bg-emerald-700/20 text-emerald-400 border border-emerald-500/30">
+                                {item.tag}
+                              </span>
+                            )}
+                          </h5>
+                          <span className="font-sans font-black text-tawerna-gold text-base md:text-lg shrink-0">
+                            {item.price}
+                          </span>
+                        </div>
+                        {item.description && (
+                          <p className="text-xs md:text-sm text-tawerna-sand italic leading-relaxed pr-6">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
 
-              {/* Action buttons */}
-              <div className="pt-4 flex flex-wrap gap-3">
-                <a
-                  href="#kontakt"
-                  className="px-5 py-3 bg-tawerna-gold hover:bg-tawerna-gold-hover text-tawerna-dark font-sans font-bold text-xs rounded-md shadow-lg transition cursor-pointer"
-                >
-                  Gdzie jesteśmy?
-                </a>
-                <a
-                  href="tel:+48798550017"
-                  className="px-5 py-3 bg-tawerna-wood-light border border-tawerna-gold/20 hover:border-tawerna-gold text-tawerna-cream font-sans font-bold text-xs rounded-md shadow hover:bg-tawerna-dark transition cursor-pointer"
-                >
-                  Zadzwoń i zamów dopytując o menu
-                </a>
-              </div>
+            {/* Menu footer hint */}
+            <div className="text-center mt-12 pt-8 border-t border-tawerna-gold/20 text-sm font-serif italic text-tawerna-sand">
+              * Ryby smażymy na bieżąco. Oferta dań może się nieznacznie różnić w zależności od dnia i dostaw świeżych ryb.
             </div>
 
           </div>
@@ -450,18 +527,14 @@ export default function App() {
         </div>
       </section>
 
-      {/* 6. IMMERSIVE LIGHTBOX GALLERY GRID */}
-      <Gallery />
 
-      {/* 7. INTERACTIVE STAY PRICING CALCULATOR */}
-      <Calculator />
-
-      {/* 8. CONTACT FORM, MAPS, FAQS PANEL */}
+      {/* 5. SECTION: KONTAKT (id="kontakt") */}
       <ContactForm />
 
-      {/* 9. FOOTER SECTION */}
+      {/* FOOTER SECTION */}
       <Footer />
 
     </div>
   );
 }
+

@@ -26,11 +26,6 @@ export interface AccommodationType {
   imageUrl: string;
 }
 
-export interface FAQItem {
-  question: string;
-  answer: string;
-}
-
 export interface ReservationInquiry {
   name: string;
   phone: string;
