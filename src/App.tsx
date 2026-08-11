@@ -3,6 +3,7 @@ import Header from './components/Header';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import GoogleCalendarBooking from './components/GoogleCalendarBooking';
+import ProgressiveImage from './components/ProgressiveImage';
 import { GALLERY_ITEMS, TAVERN_HIGHLIGHTS, TAVERN_MENU } from './data';
 import { 
   CheckCircle2, 
@@ -33,6 +34,9 @@ export default function App() {
             alt="Stanica Swornegacie zachód słońca"
             className="w-full h-full object-cover select-none filter brightness-[0.3]"
             referrerPolicy="no-referrer"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Gradients to transition smoothly */}
           <div className="absolute inset-0 bg-gradient-to-t from-tawerna-dark via-transparent to-tawerna-dark/50"></div>
@@ -156,11 +160,11 @@ export default function App() {
             {/* Right Column: Beautiful main picture */}
             <div className="lg:col-span-5 flex flex-col gap-4">
               <div className="w-full aspect-[4/5] overflow-hidden rounded-2xl wood-frame relative shadow-2xl">
-                <img
+                <ProgressiveImage
                   src="https://i.ibb.co/HpzPyBF7/646397278-122175493676823864-3970029122686148013-n.jpg"
                   alt="Zbrzyca Swornegacie ogródek"
+                  containerClassName="w-full h-full"
                   className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
                 />
               </div>
             </div>
@@ -175,12 +179,11 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {GALLERY_ITEMS.slice(0, 4).map((item) => (
                 <div key={item.id} className="aspect-[4/3] rounded-xl overflow-hidden border border-tawerna-gold/20 shadow-md">
-                  <img
+                  <ProgressiveImage
                     src={item.url}
                     alt={item.title}
+                    containerClassName="w-full h-full"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
                   />
                 </div>
               ))}
@@ -262,11 +265,11 @@ export default function App() {
               {/* Photo */}
               <div className="lg:col-span-4 h-full flex flex-col justify-center">
                 <div className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl border-2 border-tawerna-gold/20 shadow-lg relative group">
-                  <img
+                  <ProgressiveImage
                     src="https://i.ibb.co/rfFNFkdn/645652060-122175493232823864-2357191817385338388-n.jpg"
                     alt="Domek dwuosobowy drewniany letniskowy"
+                    containerClassName="w-full h-full"
                     className="w-full h-full object-cover group-hover:scale-102 transition duration-500"
-                    referrerPolicy="no-referrer"
                   />
                 </div>
               </div>
@@ -332,11 +335,11 @@ export default function App() {
               {/* Photo */}
               <div className="lg:col-span-4 h-full flex flex-col justify-center">
                 <div className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl border-2 border-tawerna-gold/20 shadow-lg relative group">
-                  <img
+                  <ProgressiveImage
                     src="https://i.ibb.co/q3P07dQS/646531341-122175689648823864-7407450498153030862-n.jpg"
                     alt="Nowe wnętrze i kuchnia w domku letniskowym"
+                    containerClassName="w-full h-full"
                     className="w-full h-full object-cover group-hover:scale-102 transition duration-500"
-                    referrerPolicy="no-referrer"
                   />
                 </div>
               </div>
@@ -402,11 +405,11 @@ export default function App() {
               {/* Photo */}
               <div className="lg:col-span-4 h-full flex flex-col justify-center">
                 <div className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl border-2 border-tawerna-gold/20 shadow-lg relative group">
-                  <img
+                  <ProgressiveImage
                     src="https://i.ibb.co/HpzPyBF7/646397278-122175493676823864-3970029122686148013-n.jpg"
                     alt="Domek z widokiem na przystań i wodę"
+                    containerClassName="w-full h-full"
                     className="w-full h-full object-cover group-hover:scale-102 transition duration-500"
-                    referrerPolicy="no-referrer"
                   />
                 </div>
               </div>
@@ -439,11 +442,11 @@ export default function App() {
             {/* Left Photo */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
               <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden wood-frame shadow-xl">
-                <img
+                <ProgressiveImage
                   src={TAVERN_HIGHLIGHTS.imageUrl}
                   alt="Tawerna PTTK wnętrze ciemne drewno"
+                  containerClassName="w-full h-full"
                   className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
                 />
               </div>
             </div>

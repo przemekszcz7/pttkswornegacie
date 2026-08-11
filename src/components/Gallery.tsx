@@ -1,10 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GALLERY_ITEMS } from '../data';
 import { X, ChevronLeft, ChevronRight, Maximize2, Layers } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import ProgressiveImage from './ProgressiveImage';
 
 export default function Gallery() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Preload adjacent images when Lightbox is open for instant navigation
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    
+    const prevIdx = lightboxIndex === 0 ? GALLERY_ITEMS.length - 1 : lightboxIndex - 1;
+    const nextIdx = lightboxIndex === GALLERY_ITEMS.length - 1 ? 0 : lightboxIndex + 1;
+
+    const imgPrev = new Image();
+    imgPrev.src = GALLERY_ITEMS[prevIdx].url;
+
+    const imgNext = new Image();
+    imgNext.src = GALLERY_ITEMS[nextIdx].url;
+  }, [lightboxIndex]);
 
   const handlePrev = () => {
     if (lightboxIndex === null) return;
@@ -60,12 +75,11 @@ export default function Gallery() {
                   onClick={() => setLightboxIndex(index)}
                 >
                   {/* Photo itself */}
-                  <img
+                  <ProgressiveImage
                     src={item.url}
                     alt={item.title}
+                    containerClassName="w-full h-full"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
                   />
 
                   {/* Wood overlay gradient and zoom icon on hover */}

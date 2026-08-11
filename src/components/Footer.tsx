@@ -15,6 +15,10 @@ export default function Footer() {
             <img
               src="https://i.ibb.co/TxnBQf0H/613302369-122168003180823864-3793124179119175346-n.jpg"
               alt="PTTK Logo"
+              width="48"
+              height="48"
+              decoding="async"
+              loading="lazy"
               className="w-12 h-12 rounded-full border border-tawerna-gold object-cover"
               referrerPolicy="no-referrer"
             />
