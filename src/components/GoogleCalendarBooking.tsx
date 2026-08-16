@@ -318,12 +318,13 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
 
   const nights = countNights();
   const totalPrice = nights * pricePerDay;
+  const isPhoneValid = phone.replace(/\D/g, '').length >= 9;
   const isDatesSelected = !!checkInDate && !!checkOutDate && nights > 0 && !rangeError;
 
   // Main Booking & Payment Process (Vercel Backend Integration)
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rangeError || !fullName || !email || !phone || !isDatesSelected || isProcessingPayment) return;
+    if (rangeError || !fullName || !email || !isPhoneValid || !isDatesSelected || isProcessingPayment) return;
 
     setIsProcessingPayment(true);
     setError(null);
@@ -602,10 +603,16 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
             <Check className="w-6 h-6" />
           </div>
-          <h5 className="font-display font-bold text-base text-white">Zgłoszenie wysłane!</h5>
+          <h5 className="font-display font-bold text-base text-white">Rezerwacja potwierdzona!</h5>
           <p className="text-xs text-tawerna-sand leading-relaxed">
-            Pobyt od <strong>{checkInDate}</strong> do <strong>{checkOutDate}</strong> ({nights} {nights === 1 ? 'doba' : 'doby'}) zarejestrowany.
+            Pobyt od <strong>{checkInDate}</strong> do <strong>{checkOutDate}</strong> ({nights} {nights === 1 ? 'doba' : 'doby'}) został pomyślnie zarezerwowany.
           </p>
+          <div className="flex items-center gap-2 p-2 bg-emerald-900/40 border border-emerald-400/30 rounded-lg text-xs text-emerald-200 w-full text-left">
+            <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="text-[11px] leading-tight">
+              Potwierdzenie ze szczegółami wysłaliśmy na adres: <strong>{email}</strong>
+            </span>
+          </div>
           <div className="bg-tawerna-dark/50 p-3 rounded-lg border border-tawerna-gold/10 text-left w-full text-[10px] font-mono text-tawerna-sand space-y-0.5">
             <p><span className="text-tawerna-gold">GOŚĆ:</span> {fullName}</p>
             <p><span className="text-tawerna-gold">TEL:</span> {phone}</p>
@@ -716,6 +723,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 <input
                   type="tel"
                   required={isDatesSelected}
+                  minLength={9}
                   disabled={!isDatesSelected || isProcessingPayment}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -737,6 +745,9 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                   placeholder={isDatesSelected ? "np. jan@gmail.com" : "Wybierz termin"}
                   className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white placeholder-white/45 transition duration-200"
                 />
+                <span className="text-[10px] text-tawerna-sand/75 block mt-1">
+                  Na ten adres wyślemy potwierdzenie rezerwacji
+                </span>
               </div>
             </div>
 
@@ -756,6 +767,14 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
             </div>
           </div>
 
+          {/* Email confirmation info banner */}
+          <div className="flex items-start gap-2 p-2.5 bg-emerald-950/30 border border-emerald-500/20 rounded-xl text-emerald-200">
+            <Mail className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] leading-snug text-emerald-200/90 text-left">
+              <strong className="text-emerald-300">Potwierdzenie e-mail:</strong> Po opłaceniu rezerwacji natychmiast otrzymasz wiadomość e-mail z potwierdzeniem i szczegółami pobytu.
+            </p>
+          </div>
+
           {/* Payment Error Feedback Alert */}
           {paymentError && (
             <div className="p-3 bg-red-950/60 border border-red-500/40 rounded-lg text-xs text-red-200 flex items-start gap-2 animate-fadeIn">
@@ -771,9 +790,9 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           <div className="space-y-2 pt-1">
             <button
               type="submit"
-              disabled={isProcessingPayment || !isDatesSelected || !fullName || !phone || !email}
+              disabled={isProcessingPayment || !isDatesSelected || !fullName.trim() || !isPhoneValid || !email.trim()}
               className={`w-full py-3.5 text-center font-sans font-bold text-xs rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg ${
-                !isDatesSelected || !fullName || !phone || !email || isProcessingPayment
+                !isDatesSelected || !fullName.trim() || !isPhoneValid || !email.trim() || isProcessingPayment
                   ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700/30'
                   : 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white cursor-pointer active:scale-[0.99] border border-emerald-400/40 shadow-emerald-950/50'
               }`}
