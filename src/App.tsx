@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import GoogleCalendarBooking from './components/GoogleCalendarBooking';
 import ProgressiveImage from './components/ProgressiveImage';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import { GALLERY_ITEMS, TAVERN_HIGHLIGHTS, TAVERN_MENU } from './data';
 import { 
   CheckCircle2, 
@@ -19,6 +20,52 @@ import {
 import { motion } from 'motion/react';
 
 export default function App() {
+  const [showPrivacy, setShowPrivacy] = useState(false);
+
+  useEffect(() => {
+    const checkHash = () => {
+      if (
+        window.location.hash === '#polityka-prywatnosci' ||
+        window.location.pathname.includes('polityka-prywatnosci')
+      ) {
+        setShowPrivacy(true);
+      } else {
+        setShowPrivacy(false);
+      }
+    };
+
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    window.addEventListener('popstate', checkHash);
+
+    return () => {
+      window.removeEventListener('hashchange', checkHash);
+      window.removeEventListener('popstate', checkHash);
+    };
+  }, []);
+
+  const handleOpenPrivacy = () => {
+    setShowPrivacy(true);
+    window.location.hash = 'polityka-prywatnosci';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackFromPrivacy = () => {
+    setShowPrivacy(false);
+    window.location.hash = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (showPrivacy) {
+    return (
+      <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
+        <Header />
+        <PrivacyPolicy onBack={handleBackFromPrivacy} />
+        <Footer onOpenPrivacy={handleOpenPrivacy} />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
       
@@ -535,7 +582,7 @@ export default function App() {
       <ContactForm />
 
       {/* FOOTER SECTION */}
-      <Footer />
+      <Footer onOpenPrivacy={handleOpenPrivacy} />
 
     </div>
   );

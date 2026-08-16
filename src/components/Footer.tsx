@@ -1,7 +1,19 @@
+import React from 'react';
 import { Phone, Mail, MapPin, Facebook, Compass, Calendar } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  onOpenPrivacy?: () => void;
+}
+
+export default function Footer({ onOpenPrivacy }: FooterProps = {}) {
   const currentYear = new Date().getFullYear();
+
+  const handlePrivacyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onOpenPrivacy) {
+      e.preventDefault();
+      onOpenPrivacy();
+    }
+  };
 
   return (
     <footer className="bg-tawerna-dark text-tawerna-sand px-4 md:px-8 py-12 border-t border-tawerna-gold/15 relative overflow-hidden">
@@ -42,6 +54,13 @@ export default function Footer() {
             <a href="#tawerna" className="hover:text-tawerna-gold transition">Tawerna Gastronomia</a>
             <a href="#kalkulator" className="hover:text-tawerna-gold transition">Kalkulator wyceny</a>
             <a href="#kontakt" className="hover:text-tawerna-gold transition">Kontakt i FAQ</a>
+            <a 
+              href="polityka-prywatnosci.html" 
+              onClick={handlePrivacyClick}
+              className="text-tawerna-gold/90 hover:text-tawerna-gold transition font-medium flex items-center gap-1"
+            >
+              • Polityka Prywatności
+            </a>
           </div>
         </div>
 
@@ -92,6 +111,15 @@ export default function Footer() {
         <p className="text-tawerna-sand/60">
           &copy; {currentYear} Stanica Wodna i Tawerna PTTK Swornegacie. Wszelkie prawa zastrzeżone.
         </p>
+        <div className="flex items-center gap-4 text-tawerna-sand/70">
+          <a
+            href="polityka-prywatnosci.html"
+            onClick={handlePrivacyClick}
+            className="hover:text-tawerna-gold transition underline"
+          >
+            Polityka Prywatności
+          </a>
+        </div>
       </div>
     </footer>
   );

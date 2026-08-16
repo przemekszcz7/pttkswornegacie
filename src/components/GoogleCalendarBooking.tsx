@@ -26,17 +26,23 @@
  * =========================================================================
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Calendar as CalendarIcon, Check, AlertCircle, Sparkles, Phone, Mail, FileText, User, RefreshCw, ArrowRight, Lock } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Calendar as CalendarIcon, Check, AlertCircle, Sparkles, Phone, Mail, FileText, User, RefreshCw, Lock, Info, CreditCard, ShieldCheck } from 'lucide-react';
 
 // Google Calendar API Configs
 const API_KEY = 'AIzaSyAkBPo1RwLm0Uo5BE7YitkQSU8FN2dy1Sw';
 const CLIENT_ID = '14704527745-75qqdbll4tgc89nco3f2j4o8ehrjtiir.apps.googleusercontent.com'; // Replace with your client ID
 
+// Vercel Payment Backend Endpoint
+const VERCEL_PAYMENT_URL = 
+  (import.meta as any).env?.VITE_VERCEL_PAYMENT_URL || 
+  (import.meta as any).env?.VITE_PAYMENT_API_URL || 
+  '/api/create-payment';
+
 export const DOMKI_CONFIG = {
-  'domek-1': { name: 'Domek Dwuosobowy', calendarId: '3456c3102e164848b8c2bced2fe5e7e8af58e2d8ee0639e01a4de2969ac9cb22@group.calendar.google.com' },
-  'domek-2': { name: 'Domek Trzyosobowy', calendarId: '4b40e3b43b8f637532c2e3b13452ba080ac4ddc7e46b7e090dd35bcd088602b7@group.calendar.google.com' },
-  'domek-3': { name: 'Domek Trzyosobowy Premium', calendarId: '06e0dad49e31f1bcfb7eb83aa8df07cb71f35787747d99a56bb4c0e883c1986d@group.calendar.google.com' }
+  'domek-1': { id: '1', name: 'Domek Dwuosobowy', calendarId: '3456c3102e164848b8c2bced2fe5e7e8af58e2d8ee0639e01a4de2969ac9cb22@group.calendar.google.com' },
+  'domek-2': { id: '2', name: 'Domek Trzyosobowy', calendarId: '4b40e3b43b8f637532c2e3b13452ba080ac4ddc7e46b7e090dd35bcd088602b7@group.calendar.google.com' },
+  'domek-3': { id: '3', name: 'Domek Trzyosobowy Premium', calendarId: '06e0dad49e31f1bcfb7eb83aa8df07cb71f35787747d99a56bb4c0e883c1986d@group.calendar.google.com' }
 };
 
 interface BookedRange {
@@ -50,17 +56,26 @@ interface GoogleCalendarBookingProps {
   pricePerDay: number;
 }
 
+// Helper to format Date object into YYYY-MM-DD local string
+const formatDateStr = (date: Date): string => {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 // Helper to expand range into individual date strings (nights of stay)
 const getDatesInRange = (startDateStr: string, endDateStr: string): string[] => {
   const dates: string[] = [];
   try {
-    let current = new Date(startDateStr + 'T12:00:00');
+    if (startDateStr === endDateStr) {
+      dates.push(startDateStr);
+      return dates;
+    }
+    const current = new Date(startDateStr + 'T12:00:00');
     const end = new Date(endDateStr + 'T12:00:00');
     while (current < end) {
-      const yyyy = current.getFullYear();
-      const mm = String(current.getMonth() + 1).padStart(2, '0');
-      const dd = String(current.getDate()).padStart(2, '0');
-      dates.push(`${yyyy}-${mm}-${dd}`);
+      dates.push(formatDateStr(current));
       current.setDate(current.getDate() + 1);
     }
   } catch (e) {
@@ -72,6 +87,7 @@ const getDatesInRange = (startDateStr: string, endDateStr: string): string[] => 
 export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: GoogleCalendarBookingProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rangeError, setRangeError] = useState<string | null>(null);
   const [referrerBlocked, setReferrerBlocked] = useState(false);
   const [blockedReferrerUrl, setBlockedReferrerUrl] = useState('');
 
@@ -100,6 +116,18 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
   
   // App State
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Calculate all blocked dates into a Fast-lookup Set
+  const blockedDatesSet = useMemo(() => {
+    const set = new Set<string>();
+    bookedRanges.forEach(range => {
+      const dates = getDatesInRange(range.start, range.end);
+      dates.forEach(d => set.add(d));
+    });
+    return set;
+  }, [bookedRanges]);
 
   // Fetch events for availability checking on mount or when calendarId changes
   useEffect(() => {
@@ -117,15 +145,15 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
 
       // Destroy previous instance
       if (fpInstanceRef.current) {
-        fpInstanceRef.current.destroy();
+        try {
+          fpInstanceRef.current.destroy();
+        } catch {
+          // ignore
+        }
       }
 
-      // Gather all individual dates to block
-      const disabledDates: string[] = [];
-      bookedRanges.forEach(range => {
-        const dates = getDatesInRange(range.start, range.end);
-        disabledDates.push(...dates);
-      });
+      // Convert blocked dates to array for Flatpickr
+      const disabledDates = Array.from(blockedDatesSet);
 
       fpInstance = (window as any).flatpickr(flatpickrInputRef.current, {
         mode: 'range',
@@ -134,21 +162,58 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
         disable: disabledDates,
         dateFormat: 'Y-m-d',
         theme: 'dark',
-        onChange: (selectedDates: Date[]) => {
+        onDayCreate: (_dObj: any, _dStr: any, _fp: any, dayElem: HTMLElement & { dateObj: Date }) => {
+          if (!dayElem?.dateObj) return;
+          const dateStr = formatDateStr(dayElem.dateObj);
+          
+          if (blockedDatesSet.has(dateStr)) {
+            dayElem.classList.add('booked-day', 'flatpickr-disabled');
+            dayElem.setAttribute('title', 'Termin zajęty / Rezerwacja');
+            dayElem.setAttribute('aria-label', `${dateStr} - Termin zajęty`);
+            dayElem.style.pointerEvents = 'none';
+          }
+        },
+        onChange: (selectedDates: Date[], _dateStr: string, instance: any) => {
           if (selectedDates.length === 2) {
             const start = selectedDates[0];
             const end = selectedDates[1];
-            
-            const formatToDateStr = (date: Date) => {
-              const yyyy = date.getFullYear();
-              const mm = String(date.getMonth() + 1).padStart(2, '0');
-              const dd = String(date.getDate()).padStart(2, '0');
-              return `${yyyy}-${mm}-${dd}`;
-            };
 
-            setCheckInDate(formatToDateStr(start));
-            setCheckOutDate(formatToDateStr(end));
+            const startStr = formatDateStr(start);
+            const endStr = formatDateStr(end);
+
+            // Validation: Check if ANY day within [start, end) is booked
+            let hasBlockedDayInside = false;
+            const currentCheck = new Date(start.getTime());
+            
+            while (currentCheck < end) {
+              const currentStr = formatDateStr(currentCheck);
+              if (blockedDatesSet.has(currentStr)) {
+                hasBlockedDayInside = true;
+                break;
+              }
+              currentCheck.setDate(currentCheck.getDate() + 1);
+            }
+
+            if (hasBlockedDayInside) {
+              setRangeError('Wybrany zakres zawiera już zarezerwowane dni. Wybierz inny termin.');
+              setCheckInDate('');
+              setCheckOutDate('');
+              if (instance) {
+                instance.clear();
+              }
+              return;
+            }
+
+            // Valid range selection
+            setRangeError(null);
+            setCheckInDate(startStr);
+            setCheckOutDate(endStr);
+          } else if (selectedDates.length === 1) {
+            setRangeError(null);
+            setCheckInDate('');
+            setCheckOutDate('');
           } else {
+            setRangeError(null);
             setCheckInDate('');
             setCheckOutDate('');
           }
@@ -169,22 +234,27 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
     return () => {
       clearInterval(checkInterval);
       if (fpInstance) {
-        fpInstance.destroy();
+        try {
+          fpInstance.destroy();
+        } catch {
+          // ignore
+        }
       }
     };
-  }, [bookedRanges]);
+  }, [blockedDatesSet]);
 
   const fetchBookedEvents = async () => {
     setLoading(true);
     setError(null);
+    setRangeError(null);
     setReferrerBlocked(false);
 
     try {
       const today = new Date();
-      today.setHours(0,0,0,0);
+      today.setHours(0, 0, 0, 0);
       
       const futureLimit = new Date();
-      futureLimit.setDate(today.getDate() + 180); // 6 months in advance
+      futureLimit.setDate(today.getDate() + 240); // 8 months in advance
 
       const timeMin = today.toISOString();
       const timeMax = futureLimit.toISOString();
@@ -227,26 +297,13 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
         setBlockedReferrerUrl(window.location.origin);
         setError(`Błąd API Google: Twoja aplikacja próbuje wysłać zapytanie z adresu ${window.location.origin}, który jest zablokowany przez ograniczenia klucza API w Google Cloud Console.`);
       } else {
-        setError('Informacja: Nie udało się automatycznie sprawdzić zajętości kalendarza dla tego domku. Możesz nadal wysłać zgłoszenie rezerwacji ręcznie.');
+        setError('Informacja: Nie udało się automatycznie pobrać terminów z Kalendarza Google. Możesz nadal ręcznie wybrać termin i wysłać zapytanie.');
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper to check if custom range overlaps with existing bookings
-  const getOverlapConflict = (): BookedRange | null => {
-    if (!checkInDate || !checkOutDate) return null;
-    for (const range of bookedRanges) {
-      // standard overlap check: range.start < checkOutDate AND checkInDate < range.end
-      if (range.start < checkOutDate && checkInDate < range.end) {
-        return range;
-      }
-    }
-    return null;
-  };
-
-  const conflict = getOverlapConflict();
   const countNights = (): number => {
     if (!checkInDate || !checkOutDate) return 0;
     try {
@@ -261,90 +318,72 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
 
   const nights = countNights();
   const totalPrice = nights * pricePerDay;
-  const isDatesSelected = !!checkInDate && !!checkOutDate && nights > 0 && !conflict;
+  const isDatesSelected = !!checkInDate && !!checkOutDate && nights > 0 && !rangeError;
 
-  // Main Booking Process
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  // Main Booking & Payment Process (Vercel Backend Integration)
+  const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (conflict || !fullName || !email || !phone || !isDatesSelected) return;
+    if (rangeError || !fullName || !email || !phone || !isDatesSelected || isProcessingPayment) return;
 
-    setLoading(true);
+    setIsProcessingPayment(true);
     setError(null);
+    setPaymentError(null);
 
     try {
-      if (!(window as any).google?.accounts?.oauth2) {
-        throw new Error('Google Identity Services client is not loaded yet. Prosimy spróbować ponownie za chwilę.');
-      }
+      // 1. Calculate amount in grosze (e.g. 100 PLN = 10000 groszy)
+      const amountInGrosze = Math.round(totalPrice * 100);
 
-      // Use Google Identity Services to get access token dynamically
-      const tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/calendar.events',
-        callback: async (tokenResponse: any) => {
-          if (tokenResponse.error !== undefined) {
-            setLoading(false);
-            setError(`Logowanie nie powiodło się: ${tokenResponse.error}`);
-            return;
-          }
+      // 2. Identify calendar ID ("1", "2" or "3") based on selected cottage/service
+      const calendarNumericId = DOMKI_CONFIG[cottageKey]?.id || (cottageKey === 'domek-2' ? '2' : cottageKey === 'domek-3' ? '3' : '1');
 
-          // Save the all-day event using the obtained token via direct REST fetch API
-          await createEvent(tokenResponse.access_token);
-        },
-      });
-
-      // Request token (triggers Google Auth popup for user)
-      tokenClient.requestAccessToken({ prompt: 'consent' });
-
-    } catch (err: any) {
-      console.error('OAuth tokenClient error:', err);
-      setError(err?.message || 'Błąd uwierzytelniania Google. Upewnij się, że podany CLIENT_ID jest poprawny.');
-      setLoading(false);
-    }
-  };
-
-  const createEvent = async (token: string) => {
-    try {
-      // All-day event starts on checkInDate and ends on checkOutDate
-      const event = {
-        summary: `${cottageName} - Rezerwacja: ${fullName}`,
-        description: `Zgłoszenie rezerwacji noclegu / pobytu hotelowego:\n\n🏠 Wybrany domek: ${cottageName}\n👤 Gość: ${fullName}\n📞 Telefon: ${phone}\n✉️ Email: ${email}\n🏨 Długość pobytu: ${nights} nocy\n📅 Przyjazd: ${checkInDate}\n📅 Odjazd: ${checkOutDate}\n💰 Koszt pobytu: ${totalPrice} zł\n\n📝 Uwagi / Dodatkowe pytania: ${notes || 'Brak'}`,
-        start: {
+      // 3. Prepare JSON payload according to backend specification
+      const requestPayload = {
+        bookingData: {
+          calendarId: calendarNumericId, // Ciąg znaków "1", "2" lub "3"
+          title: `${cottageName} (${checkInDate} do ${checkOutDate})`,
           date: checkInDate,
+          time: '14:00',
+          clientName: fullName.trim(),
+          clientEmail: email.trim(),
+          clientPhone: phone.trim()
         },
-        end: {
-          date: checkOutDate,
-        },
-        attendees: [{ email: email }],
-        reminders: {
-          useDefault: false,
-          overrides: [
-            { method: 'email', minutes: 24 * 60 }, // 24h
-            { method: 'popup', minutes: 60 },      // 1h
-          ],
-        },
+        amount: amountInGrosze
       };
 
-      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`;
-      const response = await fetch(url, {
+      console.log('Inicjalizacja płatności Vercel...', VERCEL_PAYMENT_URL, requestPayload);
+
+      // 4. Send POST request to Vercel backend (/api/create-payment)
+      const response = await fetch(VERCEL_PAYMENT_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify(requestPayload),
       });
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
-        throw new Error(errData?.error?.message || `Błąd serwera Google (status ${response.status})`);
+        const errMsg = errData?.error || errData?.message || `Błąd serwera płatności (status: ${response.status})`;
+        throw new Error(errMsg);
       }
 
-      setBookingSuccess(true);
-      setLoading(false);
+      const data = await response.json();
+
+      // 5. Retrieve paymentUrl and redirect user immediately
+      const paymentUrl = data?.paymentUrl || data?.payment_url;
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
+      } else {
+        throw new Error('Odpowiedź serwera nie zawierała adresu płatności (paymentUrl).');
+      }
     } catch (err: any) {
-      console.error('Insert Event Error:', err);
-      setError(`Nie udało się zapisać rezerwacji: ${err.message || 'Brak uprawnień zapisu do wybranego kalendarza'}`);
-      setLoading(false);
+      console.error('Błąd inicjalizacji płatności Vercel:', err);
+      const errMsg = err?.message || 'Nie udało się połączyć z systemem płatności. Upewnij się, że backend na Vercel jest aktywny i spróbuj ponownie.';
+      setPaymentError(errMsg);
+      setError(errMsg);
+      alert(`Wystąpił błąd podczas przygotowywania płatności:\n\n${errMsg}`);
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
 
@@ -355,6 +394,8 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
     setNotes('');
     setCheckInDate('');
     setCheckOutDate('');
+    setRangeError(null);
+    setPaymentError(null);
     setBookingSuccess(false);
 
     // Reset flatpickr input visually
@@ -367,13 +408,15 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
 
   return (
     <div className="bg-[#120a06]/95 border border-tawerna-gold/25 rounded-2xl p-5 shadow-lg relative overflow-hidden text-left w-full h-full">
-      {/* Custom styles to colorize Flatpickr elements gold and match the Tavern vibe */}
+      {/* Visual styling for Flatpickr with distinctive colors: Green/White for available, Red for booked, Blue for selected */}
       <style>{`
         .flatpickr-calendar {
           background: #190d07 !important;
-          border: 1px solid rgba(197, 168, 128, 0.3) !important;
-          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8) !important;
+          border: 1px solid rgba(197, 168, 128, 0.35) !important;
+          box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.85) !important;
           font-family: 'Inter', sans-serif !important;
+          border-radius: 12px !important;
+          padding: 6px !important;
         }
         .flatpickr-calendar .flatpickr-months .flatpickr-month {
           background: #190d07 !important;
@@ -382,13 +425,53 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
         .flatpickr-calendar .flatpickr-weekday {
           color: #c5a880 !important;
           font-weight: bold !important;
+          font-size: 11px !important;
         }
+
+        /* Available Dates [Zielony / Biały hover] */
         .flatpickr-day {
-          color: #f4ece1 !important;
+          color: #ffffff !important;
+          font-weight: 500 !important;
+          border-radius: 6px !important;
+          transition: all 0.15s ease !important;
+        }
+        .flatpickr-day:hover:not(.booked-day):not(.flatpickr-disabled) {
+          background: rgba(34, 197, 94, 0.22) !important;
+          border-color: #22c55e !important;
+          color: #ffffff !important;
         }
         .flatpickr-day.today {
-          border-color: rgba(197, 168, 128, 0.4) !important;
+          border-color: #cca462 !important;
+          font-weight: 700 !important;
         }
+
+        /* Distinctive Red Booked Dates [Czerwony / Zajęte] */
+        .flatpickr-day.booked-day,
+        .flatpickr-day.booked-day:hover {
+          background-color: #450a0a !important;
+          border: 1px solid #ef4444 !important;
+          color: #fca5a5 !important;
+          text-decoration: line-through !important;
+          font-weight: 700 !important;
+          cursor: not-allowed !important;
+          pointer-events: none !important;
+          opacity: 0.9 !important;
+          position: relative !important;
+        }
+        .flatpickr-day.booked-day::after {
+          content: '' !important;
+          position: absolute !important;
+          bottom: 2px !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          width: 4px !important;
+          height: 4px !important;
+          border-radius: 50% !important;
+          background-color: #ef4444 !important;
+          box-shadow: 0 0 5px #ef4444 !important;
+        }
+
+        /* Selected Dates [Niebieski / Wyznaczony zakres] */
         .flatpickr-day.selected, 
         .flatpickr-day.startRange, 
         .flatpickr-day.endRange,
@@ -401,21 +484,28 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
         .flatpickr-day.selected:hover, 
         .flatpickr-day.startRange:hover, 
         .flatpickr-day.endRange:hover {
-          background: #c5a880 !important;
-          border-color: #c5a880 !important;
-          color: #120a06 !important;
+          background: #2563eb !important;
+          border-color: #3b82f6 !important;
+          color: #ffffff !important;
           font-weight: bold !important;
+          box-shadow: 0 0 10px rgba(37, 99, 235, 0.6) !important;
         }
         .flatpickr-day.inRange {
-          background: rgba(197, 168, 128, 0.18) !important;
-          border-color: transparent !important;
-          box-shadow: -5px 0 0 rgba(197, 168, 128, 0.18), 5px 0 0 rgba(197, 168, 128, 0.18) !important;
+          background: rgba(37, 99, 235, 0.28) !important;
+          border-color: rgba(59, 130, 246, 0.35) !important;
+          color: #ffffff !important;
+          box-shadow: -5px 0 0 rgba(37, 99, 235, 0.28), 5px 0 0 rgba(37, 99, 235, 0.28) !important;
         }
-        .flatpickr-day.disabled, .flatpickr-day.disabled:hover {
-          color: rgba(244, 236, 225, 0.12) !important;
-          text-decoration: line-through !important;
+
+        /* Generic past days */
+        .flatpickr-day.flatpickr-disabled:not(.booked-day), 
+        .flatpickr-day.flatpickr-disabled:not(.booked-day):hover {
+          color: rgba(244, 236, 225, 0.2) !important;
           background: transparent !important;
+          border-color: transparent !important;
+          cursor: not-allowed !important;
         }
+
         .flatpickr-calendar .flatpickr-arrow {
           border-bottom-color: #190d07 !important;
           border-top-color: #190d07 !important;
@@ -441,6 +531,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           <button
             type="button"
             onClick={fetchBookedEvents}
+            disabled={loading}
             className="flex items-center gap-1 bg-tawerna-wood/45 hover:bg-tawerna-gold/15 text-tawerna-sand hover:text-white px-2 py-1 rounded-md text-[10px] font-mono border border-tawerna-gold/10 transition duration-200"
           >
             <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin text-tawerna-gold' : ''}`} />
@@ -456,6 +547,25 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           </span>
         )}
       </div>
+
+      {/* Loading availability banner */}
+      {loading && (
+        <div className="bg-tawerna-wood/40 border border-tawerna-gold/25 text-tawerna-cream text-xs rounded-lg p-2.5 mb-3.5 flex items-center gap-2 animate-pulse">
+          <RefreshCw className="w-3.5 h-3.5 animate-spin text-tawerna-gold shrink-0" />
+          <span className="font-mono text-[11px]">Ładowanie dostępności kalendarza Google...</span>
+        </div>
+      )}
+
+      {/* Range Selection Validation Error Banner */}
+      {rangeError && (
+        <div className="bg-red-950/80 border border-red-500/60 text-red-200 text-xs rounded-lg p-3 mb-3.5 flex items-start gap-2 shadow-lg animate-fadeIn">
+          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-bold text-red-100">Błędny zakres dat</p>
+            <p className="text-[11px] leading-relaxed mt-0.5">{rangeError}</p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="bg-amber-950/40 border border-amber-500/25 text-tawerna-sand text-[11px] rounded-lg p-3.5 mb-4 flex flex-col gap-2 leading-relaxed">
@@ -510,7 +620,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           </button>
         </div>
       ) : (
-        <form onSubmit={handleBookingSubmit} className="space-y-4">
+        <form onSubmit={handlePaymentSubmit} className="space-y-4">
           
           {/* Visual Interactive Date Range Input (Flatpickr) */}
           <div className="space-y-1.5">
@@ -518,7 +628,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
               Termin pobytu (Przyjazd - Odjazd)
             </label>
             <div className="relative">
-              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tawerna-gold z-10" />
+              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tawerna-gold z-10 pointer-events-none" />
               <input
                 ref={flatpickrInputRef}
                 type="text"
@@ -528,6 +638,28 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 readOnly
                 required
               />
+            </div>
+          </div>
+
+          {/* Aesthetic Calendar Legend */}
+          <div className="bg-tawerna-dark/70 border border-tawerna-gold/20 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-[10px]">
+            <div className="flex items-center gap-1.5" title="Dni dostępne do wyboru">
+              <span className="w-3 h-3 rounded-full border border-emerald-400 bg-emerald-950/70 inline-flex items-center justify-center">
+                <span className="w-1 h-1 rounded-full bg-emerald-400"></span>
+              </span>
+              <span className="text-emerald-300 font-medium">Wolny termin</span>
+            </div>
+
+            <div className="flex items-center gap-1.5" title="Dni zablokowane w Kalendarzu Google">
+              <span className="w-3 h-3 rounded bg-red-950 border border-red-500 inline-flex items-center justify-center text-[8px] text-red-300 font-bold line-through">
+                ✕
+              </span>
+              <span className="text-red-300 font-medium">Termin zajęty</span>
+            </div>
+
+            <div className="flex items-center gap-1.5" title="Twój wybrany przedział czasu">
+              <span className="w-3 h-3 rounded bg-blue-600 border border-blue-400 shadow-[0_0_5px_rgba(59,130,246,0.6)]"></span>
+              <span className="text-blue-300 font-medium">Twój zakres (Pobyt)</span>
             </div>
           </div>
 
@@ -567,10 +699,10 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
               <input
                 type="text"
                 required={isDatesSelected}
-                disabled={!isDatesSelected}
+                disabled={!isDatesSelected || isProcessingPayment}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder={isDatesSelected ? "np. Jan Kowalski" : "Zablokowane"}
+                placeholder={isDatesSelected ? "np. Jan Kowalski" : "Wybierz najpierw termin"}
                 className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white placeholder-white/45 transition duration-200"
               />
             </div>
@@ -584,10 +716,10 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 <input
                   type="tel"
                   required={isDatesSelected}
-                  disabled={!isDatesSelected}
+                  disabled={!isDatesSelected || isProcessingPayment}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder={isDatesSelected ? "np. 798550017" : "Zablokowane"}
+                  placeholder={isDatesSelected ? "np. 798550017" : "Wybierz termin"}
                   className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white font-mono placeholder-white/45 transition duration-200"
                 />
               </div>
@@ -599,10 +731,10 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 <input
                   type="email"
                   required={isDatesSelected}
-                  disabled={!isDatesSelected}
+                  disabled={!isDatesSelected || isProcessingPayment}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={isDatesSelected ? "np. jan@gmail.com" : "Zablokowane"}
+                  placeholder={isDatesSelected ? "np. jan@gmail.com" : "Wybierz termin"}
                   className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white placeholder-white/45 transition duration-200"
                 />
               </div>
@@ -615,40 +747,67 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
               </label>
               <textarea
                 rows={2}
-                disabled={!isDatesSelected}
+                disabled={!isDatesSelected || isProcessingPayment}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder={isDatesSelected ? "np. liczba gości, dzieci, specjalne życzenia..." : "Zablokowane"}
+                placeholder={isDatesSelected ? "np. liczba gości, dzieci, specjalne życzenia..." : "Wybierz najpierw termin"}
                 className="w-full bg-tawerna-dark border border-tawerna-gold/30 focus:border-tawerna-gold focus:outline-none rounded-lg p-2.5 text-xs text-white resize-none placeholder-white/45 transition duration-200"
               />
             </div>
           </div>
 
-          {/* Submit button */}
-          <button
-            type="submit"
-            disabled={loading || !isDatesSelected || !fullName || !phone || !email}
-            className={`w-full py-3 mt-2 text-center font-sans font-bold text-xs rounded-lg transition duration-200 flex items-center justify-center gap-1.5 ${
-              !isDatesSelected || !fullName || !phone || !email || loading
-                ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700/30'
-                : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg cursor-pointer'
-            }`}
-          >
-            {loading ? (
-              <>
-                <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
-                Trwa zapisywanie...
-              </>
-            ) : (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                Zarezerwuj {cottageName}
-              </>
-            )}
-          </button>
+          {/* Payment Error Feedback Alert */}
+          {paymentError && (
+            <div className="p-3 bg-red-950/60 border border-red-500/40 rounded-lg text-xs text-red-200 flex items-start gap-2 animate-fadeIn">
+              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="font-bold text-red-300">Błąd połączenia z płatnością</p>
+                <p className="text-[11px] text-red-200/90 leading-tight mt-0.5">{paymentError}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Submit & Pay button */}
+          <div className="space-y-2 pt-1">
+            <button
+              type="submit"
+              disabled={isProcessingPayment || !isDatesSelected || !fullName || !phone || !email}
+              className={`w-full py-3.5 text-center font-sans font-bold text-xs rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg ${
+                !isDatesSelected || !fullName || !phone || !email || isProcessingPayment
+                  ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700/30'
+                  : 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white cursor-pointer active:scale-[0.99] border border-emerald-400/40 shadow-emerald-950/50'
+              }`}
+            >
+              {isProcessingPayment ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-white" />
+                  <span>Przetwarzanie płatności i przekierowanie...</span>
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-4 h-4 text-white" />
+                  <span>Zarezerwuj i zapłać online ({totalPrice > 0 ? `${totalPrice} zł` : 'Wybierz termin'})</span>
+                </>
+              )}
+            </button>
+
+            {/* Payment security & methods badges */}
+            <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 px-1 text-[10px] text-tawerna-sand/80">
+              <div className="flex items-center gap-1 text-emerald-400">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Bezpieczna płatność online</span>
+              </div>
+              <div className="flex items-center gap-1.5 font-mono text-[9px] font-bold text-tawerna-cream">
+                <span className="px-1.5 py-0.5 bg-tawerna-dark rounded border border-tawerna-gold/20">BLIK</span>
+                <span className="px-1.5 py-0.5 bg-tawerna-dark rounded border border-tawerna-gold/20">imoje</span>
+                <span className="px-1.5 py-0.5 bg-tawerna-dark rounded border border-tawerna-gold/20">Karta / Przelew</span>
+              </div>
+            </div>
+          </div>
 
         </form>
       )}
     </div>
   );
 }
+
