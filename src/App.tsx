@@ -15,7 +15,8 @@ import {
   Utensils,
   Home,
   ShieldCheck,
-  BookOpen
+  BookOpen,
+  Mail
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -256,6 +257,10 @@ export default function App() {
             <p className="max-w-2xl mx-auto text-tawerna-cream text-lg md:text-xl font-serif italic text-balance">
               Przygotowaliśmy trzy komfortowe, pachnące drewnem domki letniskowe. Wybierz termin na kalendarzyku obok domku i wyślij zgłoszenie – to banalnie proste!
             </p>
+            <div className="inline-flex items-center gap-2 mt-5 px-4 py-2 bg-emerald-950/70 border border-emerald-500/30 rounded-full text-xs text-emerald-200 shadow-lg">
+              <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>Po dokonaniu i opłaceniu rezerwacji natychmiast otrzymasz potwierdzenie na swój adres e-mail</span>
+            </div>
           </div>
 
           {/* Vertical list of cottages - incredibly readable and structured */}
