@@ -27,17 +27,18 @@
  */
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Calendar as CalendarIcon, Check, AlertCircle, Sparkles, Phone, Mail, FileText, User, RefreshCw, Lock, Info, CreditCard, ShieldCheck } from 'lucide-react';
+import { Calendar as CalendarIcon, Check, AlertCircle, Sparkles, Phone, Mail, FileText, User, RefreshCw, Lock, CreditCard, ShieldCheck } from 'lucide-react';
 
 // Google Calendar API Configs
 const API_KEY = 'AIzaSyAkBPo1RwLm0Uo5BE7YitkQSU8FN2dy1Sw';
-const CLIENT_ID = '14704527745-75qqdbll4tgc89nco3f2j4o8ehrjtiir.apps.googleusercontent.com'; // Replace with your client ID
 
-// Vercel Payment Backend Endpoint
-const VERCEL_PAYMENT_URL = 
+// Vercel Payment Backend Endpoint with quote trimming
+const RAW_URL = 
   (import.meta as any).env?.VITE_VERCEL_PAYMENT_URL || 
   (import.meta as any).env?.VITE_PAYMENT_API_URL || 
   '/api/create-payment';
+
+const VERCEL_PAYMENT_URL = RAW_URL.replace(/^["']|["']$/g, '').trim();
 
 export const DOMKI_CONFIG = {
   'domek-1': { id: '1', name: 'Domek Dwuosobowy', calendarId: '3456c3102e164848b8c2bced2fe5e7e8af58e2d8ee0639e01a4de2969ac9cb22@group.calendar.google.com' },
@@ -340,7 +341,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
       // 3. Prepare JSON payload according to backend specification
       const requestPayload = {
         bookingData: {
-          calendarId: calendarNumericId, // Ciąg znaków "1", "2" lub "3"
+          calendarId: calendarNumericId,
           title: `${cottageName} (${checkInDate} do ${checkOutDate})`,
           date: checkInDate,
           time: '14:00',
@@ -409,7 +410,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
 
   return (
     <div className="bg-[#120a06]/95 border border-tawerna-gold/25 rounded-2xl p-5 shadow-lg relative overflow-hidden text-left w-full h-full">
-      {/* Visual styling for Flatpickr with distinctive colors: Green/White for available, Red for booked, Blue for selected */}
+      {/* Visual styling for Flatpickr */}
       <style>{`
         .flatpickr-calendar {
           background: #190d07 !important;
@@ -429,7 +430,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           font-size: 11px !important;
         }
 
-        /* Available Dates [Zielony / Biały hover] */
+        /* Available Dates */
         .flatpickr-day {
           color: #ffffff !important;
           font-weight: 500 !important;
@@ -446,7 +447,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           font-weight: 700 !important;
         }
 
-        /* Distinctive Red Booked Dates [Czerwony / Zajęte] */
+        /* Booked Dates */
         .flatpickr-day.booked-day,
         .flatpickr-day.booked-day:hover {
           background-color: #450a0a !important;
@@ -472,7 +473,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
           box-shadow: 0 0 5px #ef4444 !important;
         }
 
-        /* Selected Dates [Niebieski / Wyznaczony zakres] */
+        /* Selected Dates */
         .flatpickr-day.selected, 
         .flatpickr-day.startRange, 
         .flatpickr-day.endRange,
@@ -689,7 +690,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
             </div>
           )}
 
-          {/* Guest Information form - Enabled only when dates are selected */}
+          {/* Guest Information form */}
           <div className={`space-y-3.5 transition-all duration-300 ${isDatesSelected ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'}`}>
             <div className="flex items-center gap-1.5 pb-1 border-b border-tawerna-gold/20">
               <span className="text-[10px] font-mono font-bold text-tawerna-gold uppercase tracking-wider">
@@ -829,4 +830,3 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
     </div>
   );
 }
-

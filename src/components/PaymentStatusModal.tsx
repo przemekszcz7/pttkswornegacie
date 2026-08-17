@@ -14,10 +14,10 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
     type: PaymentStatusType;
   } | null>(null);
 
+  // Krok 1: Odczyt parametrów z adresu URL po powrocie z bramki
   useEffect(() => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      // Check standard and imoje status parameters
       const statusParam = (
         urlParams.get('status') ||
         urlParams.get('payment_status') ||
@@ -40,15 +40,19 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
             type: 'success',
           });
         }
-
-        // Clean URL parameters without reloading the page
-        const cleanUrl = window.location.pathname + (window.location.hash || '');
-        window.history.replaceState({}, document.title, cleanUrl);
       }
     } catch (e) {
       console.error('Error parsing payment status from URL:', e);
     }
   }, []);
+
+  // Krok 2: Czyszczenie parametru z paska URL dopiero po otwarciu modala
+  useEffect(() => {
+    if (modalState?.isOpen) {
+      const cleanUrl = window.location.pathname + (window.location.hash || '');
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  }, [modalState]);
 
   const handleClose = () => {
     setModalState(null);
@@ -81,7 +85,7 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
               : 'bg-[#1e130c] border-amber-500/40 text-tawerna-cream shadow-amber-950/50'
           }`}
         >
-          {/* Close button */}
+          {/* Przycisk zamknięcia */}
           <button
             onClick={handleClose}
             aria-label="Zamknij powiadomienie"
@@ -90,7 +94,7 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
             <X className="w-5 h-5" />
           </button>
 
-          {/* Icon Header */}
+          {/* Nagłówek i Ikona */}
           <div className="flex items-center gap-4 mb-5">
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border ${
               isSuccess 
@@ -115,7 +119,7 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
             </div>
           </div>
 
-          {/* Core Content */}
+          {/* Treść komunikatu */}
           <div className="space-y-4 text-sm sm:text-base leading-relaxed text-tawerna-cream/95">
             {isSuccess ? (
               <>
@@ -123,7 +127,6 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
                   Twoja płatność została pomyślnie zrealizowana, a pobyt w Stanicy Wodnej Swornegacie został zarezerwowany.
                 </p>
 
-                {/* Success info card */}
                 <div className="p-4 rounded-2xl bg-emerald-950/50 border border-emerald-500/30 space-y-2 text-xs sm:text-sm">
                   <div className="flex items-start gap-2.5 text-emerald-200">
                     <Mail className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
@@ -139,7 +142,6 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
               </>
             ) : (
               <>
-                {/* Failure main required message */}
                 <div className="p-4 rounded-2xl bg-amber-950/60 border border-amber-500/35 space-y-3">
                   <p className="font-sans font-medium text-amber-100 text-sm sm:text-base leading-relaxed">
                     Płatność nie została sfinalizowana. Na Twój adres e-mail wysłaliśmy wiadomość z linkiem do dokończenia płatności. Masz 10 minut na opłacenie rezerwacji, po tym czasie termin zostanie zwolniony.
@@ -164,7 +166,7 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
             )}
           </div>
 
-          {/* Action buttons */}
+          {/* Przyciski dolne */}
           <div className="mt-6 pt-4 border-t border-tawerna-gold/20 flex flex-col sm:flex-row gap-3 items-center justify-end">
             {!isSuccess && (
               <a
