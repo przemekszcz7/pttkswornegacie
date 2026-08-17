@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import GoogleCalendarBooking from './components/GoogleCalendarBooking';
 import ProgressiveImage from './components/ProgressiveImage';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import PaymentStatusModal from './components/PaymentStatusModal';
 import { GALLERY_ITEMS, TAVERN_HIGHLIGHTS, TAVERN_MENU } from './data';
 import { 
   CheckCircle2, 
@@ -60,6 +61,7 @@ export default function App() {
   if (showPrivacy) {
     return (
       <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
+        <PaymentStatusModal />
         <Header />
         <PrivacyPolicy onBack={handleBackFromPrivacy} />
         <Footer onOpenPrivacy={handleOpenPrivacy} />
@@ -69,6 +71,7 @@ export default function App() {
 
   return (
     <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
+      <PaymentStatusModal />
       
       {/* Sticky Top Header */}
       <Header />
