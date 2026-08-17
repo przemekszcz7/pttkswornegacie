@@ -136,7 +136,7 @@ export default function PaymentStatusModal({ onClose }: PaymentStatusModalProps)
                   </div>
                   <div className="flex items-center gap-2.5 text-emerald-200 pt-1 border-t border-emerald-500/20">
                     <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
-                    <span>Twój termin został zablokowany w naszym grafiku. Do zobaczenia na Kaszubach!</span>
+                    <span>Twój termin został zarezerwowany w naszym grafiku. Do zobaczenia na Kaszubach!</span>
                   </div>
                 </div>
               </>
