@@ -5,6 +5,9 @@ import Footer from './components/Footer';
 import GoogleCalendarBooking from './components/GoogleCalendarBooking';
 import ProgressiveImage from './components/ProgressiveImage';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
+import CookiePolicy from './components/CookiePolicy';
+import CookieBanner from './components/CookieBanner';
 import PaymentStatusModal from './components/PaymentStatusModal';
 import { GALLERY_ITEMS, TAVERN_HIGHLIGHTS, TAVERN_MENU } from './data';
 import { 
@@ -17,22 +20,27 @@ import {
   Home,
   ShieldCheck,
   BookOpen,
-  Mail
+  Mail,
+  CreditCard
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export default function App() {
-  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [currentLegalView, setCurrentLegalView] = useState<'privacy' | 'terms' | 'cookies' | null>(null);
 
   useEffect(() => {
     const checkHash = () => {
-      if (
-        window.location.hash === '#polityka-prywatnosci' ||
-        window.location.pathname.includes('polityka-prywatnosci')
-      ) {
-        setShowPrivacy(true);
+      const hash = window.location.hash;
+      const pathname = window.location.pathname;
+
+      if (hash === '#regulamin' || pathname.includes('regulamin')) {
+        setCurrentLegalView('terms');
+      } else if (hash === '#polityka-prywatnosci' || pathname.includes('polityka-prywatnosci')) {
+        setCurrentLegalView('privacy');
+      } else if (hash === '#polityka-cookies' || hash === '#cookies' || pathname.includes('polityka-cookies')) {
+        setCurrentLegalView('cookies');
       } else {
-        setShowPrivacy(false);
+        setCurrentLegalView(null);
       }
     };
 
@@ -47,24 +55,61 @@ export default function App() {
   }, []);
 
   const handleOpenPrivacy = () => {
-    setShowPrivacy(true);
+    setCurrentLegalView('privacy');
     window.location.hash = 'polityka-prywatnosci';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleBackFromPrivacy = () => {
-    setShowPrivacy(false);
+  const handleOpenTerms = () => {
+    setCurrentLegalView('terms');
+    window.location.hash = 'regulamin';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleOpenCookies = () => {
+    setCurrentLegalView('cookies');
+    window.location.hash = 'polityka-cookies';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackFromLegal = () => {
+    setCurrentLegalView(null);
     window.location.hash = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (showPrivacy) {
+  if (currentLegalView === 'privacy') {
     return (
       <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
         <PaymentStatusModal />
         <Header />
-        <PrivacyPolicy onBack={handleBackFromPrivacy} />
-        <Footer onOpenPrivacy={handleOpenPrivacy} />
+        <PrivacyPolicy onBack={handleBackFromLegal} />
+        <Footer onOpenPrivacy={handleOpenPrivacy} onOpenTerms={handleOpenTerms} onOpenCookies={handleOpenCookies} />
+        <CookieBanner onOpenCookies={handleOpenCookies} />
+      </div>
+    );
+  }
+
+  if (currentLegalView === 'terms') {
+    return (
+      <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
+        <PaymentStatusModal />
+        <Header />
+        <TermsOfService onBack={handleBackFromLegal} />
+        <Footer onOpenPrivacy={handleOpenPrivacy} onOpenTerms={handleOpenTerms} onOpenCookies={handleOpenCookies} />
+        <CookieBanner onOpenCookies={handleOpenCookies} />
+      </div>
+    );
+  }
+
+  if (currentLegalView === 'cookies') {
+    return (
+      <div className="bg-tawerna-dark text-tawerna-cream font-sans overflow-x-hidden min-h-screen">
+        <PaymentStatusModal />
+        <Header />
+        <CookiePolicy onBack={handleBackFromLegal} />
+        <Footer onOpenPrivacy={handleOpenPrivacy} onOpenTerms={handleOpenTerms} onOpenCookies={handleOpenCookies} />
+        <CookieBanner onOpenCookies={handleOpenCookies} />
       </div>
     );
   }
@@ -263,6 +308,31 @@ export default function App() {
             <div className="inline-flex items-center gap-2 mt-5 px-4 py-2 bg-emerald-950/70 border border-emerald-500/30 rounded-full text-xs text-emerald-200 shadow-lg">
               <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>Po dokonaniu i opłaceniu rezerwacji natychmiast otrzymasz potwierdzenie na swój adres e-mail</span>
+            </div>
+
+            {/* ING Pay System Notice with direct legal links */}
+            <div className="max-w-3xl mx-auto mt-6 p-4 bg-[#180d07]/90 border border-tawerna-gold/35 rounded-2xl shadow-lg flex items-center gap-3.5 text-left">
+              <div className="w-10 h-10 rounded-xl bg-tawerna-gold/15 border border-tawerna-gold/30 flex items-center justify-center text-tawerna-gold shrink-0">
+                <CreditCard className="w-5 h-5" />
+              </div>
+              <p className="text-xs sm:text-sm text-tawerna-cream leading-relaxed">
+                Klient może zapłacić za zamówioną usługę poprzez zewnętrzny system płatności ING Pay, obsługiwany przez ING Bank Śląski S.A. z siedzibą w Katowicach. Zapoznaj się z naszym{' '}
+                <a
+                  href="#regulamin"
+                  onClick={handleOpenTerms}
+                  className="text-tawerna-gold font-bold underline hover:text-white transition cursor-pointer"
+                >
+                  Regulaminem
+                </a>{' '}
+                oraz{' '}
+                <a
+                  href="#polityka-prywatnosci"
+                  onClick={handleOpenPrivacy}
+                  className="text-tawerna-gold font-bold underline hover:text-white transition cursor-pointer"
+                >
+                  Polityką Prywatności
+                </a>.
+              </p>
             </div>
           </div>
 
@@ -590,7 +660,10 @@ export default function App() {
       <ContactForm />
 
       {/* FOOTER SECTION */}
-      <Footer onOpenPrivacy={handleOpenPrivacy} />
+      <Footer onOpenPrivacy={handleOpenPrivacy} onOpenTerms={handleOpenTerms} onOpenCookies={handleOpenCookies} />
+
+      {/* Cookie Consent Banner */}
+      <CookieBanner onOpenCookies={handleOpenCookies} />
 
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ShieldCheck, ArrowLeft, Mail, Lock, FileText, Calendar } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, Mail, Calendar, Scale, AlertCircle, Cookie, FileText } from 'lucide-react';
 
 interface PrivacyPolicyProps {
   onBack?: () => void;
@@ -59,10 +59,10 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         {/* Content Sections */}
         <div className="space-y-6 text-left">
           
-          {/* Section 1 */}
+          {/* 1. Administrator Danych Osobowych */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">1</span>
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">1</span>
               Administrator Danych Osobowych
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed">
@@ -79,10 +79,10 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </p>
           </div>
 
-          {/* Section 2 */}
+          {/* 2. Jakie dane przetwarzamy? */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">2</span>
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">2</span>
               Jakie dane przetwarzamy?
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-3">
@@ -108,16 +108,16 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </ul>
           </div>
 
-          {/* Section 3 */}
+          {/* 3. Cel, podstawa i okres przetwarzania danych */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">3</span>
-              Cel i podstawa przetwarzania danych
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">3</span>
+              Cel, podstawa i okres przetwarzania danych
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-3">
               Twoje dane osobowe są przetwarzane wyłącznie w celu:
             </p>
-            <ul className="space-y-2 text-sm md:text-base text-tawerna-sand">
+            <ul className="space-y-2 text-sm md:text-base text-tawerna-sand mb-4">
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0"></span>
                 <span>Realizacji procesu rezerwacji oraz obsługi zapytania dotyczącego wynajmu domków/usług.</span>
@@ -131,16 +131,19 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
                 <span>Przesłania automatycznego zaproszenia/potwierdzenia terminu na podany adres e-mail.</span>
               </li>
             </ul>
+            <div className="p-4 bg-tawerna-wood/40 border border-tawerna-gold/25 rounded-xl text-sm md:text-base text-tawerna-cream leading-relaxed">
+              <strong className="text-tawerna-gold">Okres przechowywania danych:</strong> Twoje dane osobowe są przechowywane przez czas niezbędny do realizacji rezerwacji, a po jej zakończeniu — przez okres wymagany obowiązującymi przepisami prawa, w tym z uwzględnieniem okresu przedawnienia ewentualnych roszczeń wynikających z umowy (co do zasady nie dłużej niż 6 lat od zakończenia realizacji usługi). Dane przetwarzane na podstawie zgody są przechowywane do czasu jej wycofania.
+            </div>
           </div>
 
-          {/* Section 4 */}
+          {/* 4. Integracja z Google Calendar API */}
           <div className="bg-[#1a100a]/95 border-2 border-tawerna-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
             <div className="flex items-center gap-2 text-blue-400 mb-2">
               <Calendar className="w-5 h-5" />
               <span className="font-mono text-xs uppercase font-bold tracking-wider">Integracja zewnętrzna</span>
             </div>
             <h2 className="font-display font-bold text-xl md:text-2xl text-white mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-400/40 inline-flex items-center justify-center text-xs text-blue-300 font-mono">4</span>
+              <span className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-400/40 inline-flex items-center justify-center text-xs text-blue-300 font-mono font-bold">4</span>
               Integracja z Google Calendar API
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-4">
@@ -169,10 +172,10 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </div>
           </div>
 
-          {/* Section 5 */}
+          {/* 5. Odbiorcy danych i przekazywanie danych */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">5</span>
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">5</span>
               Odbiorcy danych i przekazywanie danych
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed">
@@ -180,10 +183,10 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </p>
           </div>
 
-          {/* Section 6 */}
+          {/* 6. Prawa użytkownika */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">6</span>
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">6</span>
               Prawa użytkownika
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed mb-3">
@@ -197,7 +200,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
                 • Sprostowania (poprawiania) danych
               </div>
               <div className="bg-tawerna-dark/50 p-2.5 rounded-lg border border-tawerna-gold/15">
-                • Żądania usunięcia danych (&bdquo;prawo do bycia zapomnianym&rdquo;)
+                • Żądania usunięcia danych („prawo do bycia zapomnianym")
               </div>
               <div className="bg-tawerna-dark/50 p-2.5 rounded-lg border border-tawerna-gold/15">
                 • Ograniczenia przetwarzania danych
@@ -214,21 +217,46 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </p>
           </div>
 
-          {/* Section 7 */}
+          {/* 7. Prawo wniesienia skargi do organu nadzorczego */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">7</span>
-              Pliki Cookies (Ciasteczka)
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">7</span>
+              Prawo wniesienia skargi do organu nadzorczego
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed">
-              Strona <strong className="text-white">pttkswornegacie.pl</strong> może wykorzystywać pliki cookies niezbędne do prawidłowego funkcjonowania witryny oraz obsługi formularzy rezerwacyjnych. Użytkownik może w każdej chwili zmienić ustawienia dotyczące plików cookies w swojej przeglądarce internetowej.
+              Przysługuje Państwu prawo wniesienia skargi do organu nadzorczego zajmującego się ochroną danych osobowych, którym jest Prezes Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa), jeżeli uznają Państwo, że przetwarzanie Państwa danych osobowych narusza przepisy RODO.
             </p>
           </div>
 
-          {/* Section 8 */}
+          {/* 8. Profilowanie */}
           <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
             <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono">8</span>
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">8</span>
+              Profilowanie
+            </h2>
+            <p className="text-sm md:text-base text-tawerna-cream leading-relaxed">
+              Strona internetowa nie korzysta z profilowania danych osobowych, tj. nie podejmuje wobec użytkowników zautomatyzowanych decyzji wywołujących skutki prawne lub w podobny sposób istotnie na nich wpływających.
+            </p>
+          </div>
+
+          {/* 9. Pliki Cookies (Ciasteczka) */}
+          <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
+            <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">9</span>
+              Pliki Cookies (Ciasteczka)
+            </h2>
+            <p className="text-sm md:text-base text-tawerna-cream leading-relaxed">
+              Strona <strong className="text-white">pttkswornegacie.pl</strong> może wykorzystywać pliki cookies niezbędne do prawidłowego funkcjonowania witryny oraz obsługi formularzy rezerwacyjnych. Szczegółowe informacje na temat wykorzystywanych plików cookies znajdują się w{' '}
+              <a href="polityka-cookies.html" className="text-tawerna-gold font-bold underline hover:text-white transition">
+                odrębnej Polityce Cookies
+              </a>. Użytkownik może w każdej chwili zmienić ustawienia dotyczące plików cookies w swojej przeglądarce internetowej lub poprzez banner zgody wyświetlany na stronie.
+            </p>
+          </div>
+
+          {/* 10. Zmiany w Polityce Prywatności */}
+          <div className="bg-[#150b07]/90 border border-tawerna-gold/20 rounded-2xl p-6 md:p-8 shadow-lg">
+            <h2 className="font-display font-bold text-xl md:text-2xl text-tawerna-gold mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-tawerna-gold/15 border border-tawerna-gold/30 inline-flex items-center justify-center text-xs text-tawerna-gold font-mono font-bold">10</span>
               Zmiany w Polityce Prywatności
             </h2>
             <p className="text-sm md:text-base text-tawerna-cream leading-relaxed">
@@ -239,7 +267,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </p>
             <div className="mt-4 pt-4 border-t border-tawerna-gold/15 flex items-center justify-between text-xs text-tawerna-sand">
               <span>Status: Obowiązująca</span>
-              <span className="font-mono text-tawerna-gold">Data ostatniej aktualizacji: 16 sierpnia 2026 r.</span>
+              <span className="font-mono text-tawerna-gold font-bold">Data ostatniej aktualizacji: 13 września 2026 r.</span>
             </div>
           </div>
 

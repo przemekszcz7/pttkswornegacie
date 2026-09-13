@@ -3,15 +3,31 @@ import { Phone, Mail, MapPin, Facebook, Compass, Calendar } from 'lucide-react';
 
 interface FooterProps {
   onOpenPrivacy?: () => void;
+  onOpenTerms?: () => void;
+  onOpenCookies?: () => void;
 }
 
-export default function Footer({ onOpenPrivacy }: FooterProps = {}) {
+export default function Footer({ onOpenPrivacy, onOpenTerms, onOpenCookies }: FooterProps = {}) {
   const currentYear = new Date().getFullYear();
 
   const handlePrivacyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onOpenPrivacy) {
       e.preventDefault();
       onOpenPrivacy();
+    }
+  };
+
+  const handleTermsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onOpenTerms) {
+      e.preventDefault();
+      onOpenTerms();
+    }
+  };
+
+  const handleCookiesClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onOpenCookies) {
+      e.preventDefault();
+      onOpenCookies();
     }
   };
 
@@ -55,11 +71,25 @@ export default function Footer({ onOpenPrivacy }: FooterProps = {}) {
             <a href="#kalkulator" className="hover:text-tawerna-gold transition">Kalkulator wyceny</a>
             <a href="#kontakt" className="hover:text-tawerna-gold transition">Kontakt i FAQ</a>
             <a 
+              href="regulamin.html" 
+              onClick={handleTermsClick}
+              className="text-tawerna-gold/90 hover:text-tawerna-gold transition font-medium flex items-center gap-1"
+            >
+              • Regulamin Serwisu
+            </a>
+            <a 
               href="polityka-prywatnosci.html" 
               onClick={handlePrivacyClick}
               className="text-tawerna-gold/90 hover:text-tawerna-gold transition font-medium flex items-center gap-1"
             >
               • Polityka Prywatności
+            </a>
+            <a 
+              href="polityka-cookies.html" 
+              onClick={handleCookiesClick}
+              className="text-tawerna-gold/90 hover:text-tawerna-gold transition font-medium flex items-center gap-1"
+            >
+              • Polityka Cookies
             </a>
           </div>
         </div>
@@ -111,13 +141,29 @@ export default function Footer({ onOpenPrivacy }: FooterProps = {}) {
         <p className="text-tawerna-sand/60">
           &copy; {currentYear} Stanica Wodna i Tawerna PTTK Swornegacie. Wszelkie prawa zastrzeżone.
         </p>
-        <div className="flex items-center gap-4 text-tawerna-sand/70">
+        <div className="flex flex-wrap items-center gap-4 text-tawerna-sand/70">
+          <a
+            href="regulamin.html"
+            onClick={handleTermsClick}
+            className="hover:text-tawerna-gold transition underline"
+          >
+            Regulamin Serwisu
+          </a>
+          <span>•</span>
           <a
             href="polityka-prywatnosci.html"
             onClick={handlePrivacyClick}
             className="hover:text-tawerna-gold transition underline"
           >
             Polityka Prywatności
+          </a>
+          <span>•</span>
+          <a
+            href="polityka-cookies.html"
+            onClick={handleCookiesClick}
+            className="hover:text-tawerna-gold transition underline"
+          >
+            Polityka Cookies
           </a>
         </div>
       </div>

@@ -114,6 +114,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
   
   // App State
   const [bookingSuccess, setBookingSuccess] = useState(false);
@@ -325,7 +326,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
   // Main Booking & Payment Process (Vercel Backend Integration)
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rangeError || !fullName || !email || !isPhoneValid || !isDatesSelected || isProcessingPayment) return;
+    if (rangeError || !fullName || !email || !isPhoneValid || !isDatesSelected || !termsAccepted || isProcessingPayment) return;
 
     setIsProcessingPayment(true);
     setError(null);
@@ -396,6 +397,7 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
     setNotes('');
     setCheckInDate('');
     setCheckOutDate('');
+    setTermsAccepted(false);
     setRangeError(null);
     setPaymentError(null);
     setBookingSuccess(false);
@@ -787,13 +789,45 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
             </div>
           )}
 
+          {/* Consent Checkbox */}
+          <div className="pt-2 text-left bg-tawerna-dark/40 p-3 rounded-xl border border-tawerna-gold/20">
+            <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                id={`consent-${cottageKey}`}
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-tawerna-gold/40 text-tawerna-gold focus:ring-tawerna-gold bg-tawerna-dark accent-amber-500 cursor-pointer shrink-0"
+              />
+              <span className="text-[11px] sm:text-xs text-tawerna-cream leading-snug">
+                Akceptuję{' '}
+                <a
+                  href="#regulamin"
+                  className="text-tawerna-gold font-bold underline hover:text-white transition"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Regulamin
+                </a>{' '}
+                i{' '}
+                <a
+                  href="#polityka-prywatnosci"
+                  className="text-tawerna-gold font-bold underline hover:text-white transition"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Politykę Prywatności
+                </a>{' '}
+                oraz wyrażam zgodę na przetwarzanie moich danych osobowych w celu realizacji rezerwacji
+              </span>
+            </label>
+          </div>
+
           {/* Submit & Pay button */}
           <div className="space-y-2 pt-1">
             <button
               type="submit"
-              disabled={isProcessingPayment || !isDatesSelected || !fullName.trim() || !isPhoneValid || !email.trim()}
+              disabled={isProcessingPayment || !isDatesSelected || !fullName.trim() || !isPhoneValid || !email.trim() || !termsAccepted}
               className={`w-full py-3.5 text-center font-sans font-bold text-xs rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg ${
-                !isDatesSelected || !fullName.trim() || !isPhoneValid || !email.trim() || isProcessingPayment
+                !isDatesSelected || !fullName.trim() || !isPhoneValid || !email.trim() || !termsAccepted || isProcessingPayment
                   ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700/30'
                   : 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white cursor-pointer active:scale-[0.99] border border-emerald-400/40 shadow-emerald-950/50'
               }`}
@@ -822,6 +856,20 @@ export default function GoogleCalendarBooking({ cottageKey, pricePerDay }: Googl
                 <span className="px-1.5 py-0.5 bg-tawerna-dark rounded border border-tawerna-gold/20">imoje</span>
                 <span className="px-1.5 py-0.5 bg-tawerna-dark rounded border border-tawerna-gold/20">Karta / Przelew</span>
               </div>
+            </div>
+
+            {/* ING Pay & Legal Notice */}
+            <div className="p-2.5 bg-tawerna-dark/50 border border-tawerna-gold/15 rounded-lg text-left">
+              <p className="text-[10px] sm:text-[11px] text-tawerna-sand/85 leading-relaxed">
+                Klient może zapłacić za zamówioną usługę poprzez zewnętrzny system płatności ING Pay, obsługiwany przez ING Bank Śląski S.A. z siedzibą w Katowicach. Więcej szczegółów w{' '}
+                <a href="#regulamin" className="text-tawerna-gold underline hover:text-white transition font-semibold">
+                  Regulaminie
+                </a>{' '}
+                oraz{' '}
+                <a href="#polityka-prywatnosci" className="text-tawerna-gold underline hover:text-white transition font-semibold">
+                  Polityce Prywatności
+                </a>.
+              </p>
             </div>
           </div>
 
